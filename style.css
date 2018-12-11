@@ -1,0 +1,200 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.main {
+    width: 960px;
+    margin: auto;
+    margin-top: 50px;
+    padding: 20px;
+    /* border: 2px solid; */
+    border-radius: 6px;
+    /* border-color: #aadddd; */
+    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12) ;        
+}
+
+.header {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 2em;
+    color: rgb(0, 62, 104);
+}
+
+.nav {
+    height: 60px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+
+#statusRound{
+    font-weight: 400;
+    font-size: 1.2em;
+    color: rgb(0, 62, 104);
+}
+
+#statusQuestion{
+    font-weight: 400;
+    font-size: 1.2em;
+    color: rgb(0, 62, 104);
+}
+
+.leftSideNav {
+    float:left;
+    width: 608px;
+}
+
+.rightSideNav {
+    /* float:right; */
+    /* width: 50%; */
+    display: inline-flex;
+    padding-right: 0px;
+    height: 100%;
+    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+}
+
+#addPlayer{
+    /* padding: 6px; */
+    background: rgb(0, 125, 209);
+    border-radius: 6px 0px 0px 6px;
+    height: 24px;
+    width: 150px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);        
+    /* margin: 10px 5px; */
+    /* height: 100%; */
+    padding-top: 16px;
+    height: 44px;
+    }
+
+#addPlayer:hover{
+    background: rgb(35, 165, 252);
+}
+
+#addPlayer:active{
+    background: rgb(0, 62, 104);
+}
+
+#clearResults{
+    /* padding: 6px; */
+    background: rgb(59, 59, 59);
+    border-radius: 0px 6px 6px 0px;
+    /* height: 24px; */
+    width: 200px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12) ;        
+    /* margin: 10px 0px 10px 4px; */
+    /* height: 100%; */
+    padding-top: 16px;
+    height: 44px;
+    }
+
+#clearResults:hover{
+    background: rgb(117, 117, 117);
+}
+
+#clearResults:active{
+    background: rgb(39, 39, 39);
+}
+
+.playerDiv {
+    /* border: 1px solid red; */
+    margin-top: 10px;
+    height: 50px;
+    font-weight: 400;
+    font-size: 24px;
+    display: flex;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12) ;        
+}
+
+.buttonSection {
+    width: 25%;
+}
+
+.playerName {
+    width: 25%;
+    text-align:center;
+    padding: 6px 14px;
+}
+
+.playerScores {
+    width:25%;
+    text-align:center;
+    padding: 6px 14px;
+}
+
+.plusButton {
+    /* margin-left: 10%;
+    height: 38px;
+    width: 38px;
+    background: rgb(37, 109, 37);
+    border-radius: 4px;
+    margin: 6px 100px;
+    color: white;
+    text-align: center;
+    font-weight: 200;
+    cursor: pointer; */
+    background: rgb(37, 109, 37);
+    width: 25%;
+    color: white;
+    text-align: center;
+    font-weight: 200;
+    cursor: pointer; 
+    border-radius: 0px 6px 6px 0px;
+    font-size: 1.4em;
+    
+}
+
+.plusButton::before {
+    content: '+';
+}
+
+.plusButton:hover {
+    background: rgb(60, 173, 60);
+}
+
+.plusButton:active {
+    background: rgb(11, 68, 11);
+}
+
+.minusButton {
+    /* margin-left: 10%;
+    height: 38px;
+    width: 38px;
+    background: rgb(194, 50, 50);
+    border-radius: 4px;
+    margin: 6px 100px;
+    color: white;
+    text-align: center;
+    font-weight: 200;
+    cursor:pointer; */
+    background: rgb(194, 50, 50);
+    width: 25%;
+    color: white;
+    text-align: center;
+    font-weight: 200;
+    cursor: pointer; 
+    border-radius: 6px 0px 0px 6px;
+    font-size: 1.4em;
+    
+}
+
+.minusButton::before {
+    content: '-';
+    display: block;
+}
+
+.minusButton:hover{
+    background: rgb(230, 37, 37);
+}
+
+.minusButton:active{
+    background: rgb(90, 15, 15);
+}
