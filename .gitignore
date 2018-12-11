@@ -1,1 +1,6 @@
 /node_modules
+/package-lock.json
+/package.json
+/scripts/handlebars.js
+/scripts/jquery.min.js
+/server.js
