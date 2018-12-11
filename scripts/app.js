@@ -60,7 +60,8 @@ function addPlayer() {
 
 function clearResults() {
     if(confirm("Вы действительно хотите очистить результаты?")) clearPlayerList();   
-    setCookie('stats', JSON.stringify(''), 2);
+    cStats = {}
+    setCookie('stats', JSON.stringify(cStats), 2);
 }
 
 function scorePlus(e) {
@@ -73,6 +74,10 @@ function scoreMinus(e) {
     console.log(cStats);
     $('#' + e.target.parentNode.id + '_scores').text(cStats[e.target.parentNode.id].scores -= 10);
     setCookie('stats', JSON.stringify(cStats), 2);
+}
+
+function nextRound() {
+    
 }
 
 
@@ -88,6 +93,6 @@ window.onload = function () {
 
     $('#addPlayer').click(addPlayer);
     $('#clearResults').click(clearResults);
-    
+    $('#nextRound').click(nextRound);
     
 }
