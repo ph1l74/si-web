@@ -94,12 +94,15 @@ function addPlayer() {
 
 // clearing all results from cStats and writing it to Cookie
 function clearResults() {
-    if (confirm("Вы действительно хотите очистить результаты?")) clearPlayerList();
-    cStats = {};
-    curRound = 1;
-    curCost = 10;
-    setCookie('stats', JSON.stringify(cStats), 2);
-    updateRoundInfo();
+    if (confirm("Вы действительно хотите очистить результаты?")) 
+    { 
+        clearPlayerList();
+        cStats = {};
+        curRound = 1;
+        curCost = 10;
+        setCookie('stats', JSON.stringify(cStats), 2);
+        updateRoundInfo();
+    }
 }
 
 
