@@ -65,11 +65,11 @@ body {
     height: 38px;
     }
 
-#nextRound:hover{
+#nextQuestion:hover{
     background: rgb(35, 165, 252);
 }
 
-#nextRound:active{
+#nextQuestion:active{
     background: rgb(0, 62, 104);
 }
 
