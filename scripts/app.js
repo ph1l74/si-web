@@ -29,6 +29,14 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 
+// 
+function createBlankTable() {
+    var playerlist = $('#playerList');
+    blankTable = $('<div>').addClass('blankTable').text('Таблица пуста. Добавьте игрока, чтобы начать подсчет очков.') 
+    playerlist.append(blankTable);
+}
+
+
 // creating playerDiv with plus/minus button, player name and player scores
 function createPlayerRow(playerName, playerScores) {
     var playerlist = $('#playerList');
@@ -48,6 +56,7 @@ function createPlayerRow(playerName, playerScores) {
 function clearPlayerList() {
     var playerList = $('#playerList');
     playerList.empty();
+    createBlankTable();
 }
 
 
@@ -67,11 +76,14 @@ function addPlayer() {
     var playerName = prompt("Введите имя нового игрока");
     var playerScores = 0
     if (playerName && !checkNames(playerName)) {
-        playerObj = {}
-        playerObj[playerName] = { scores: playerScores }
-        // console.log(playerObj);
+        playerObj = {};
+        playerObj[playerName] = { scores: playerScores };
+        if (JSON.stringify(cStats) == '{}') {
+            $('#playerList').empty();
+        }
         $.extend(cStats, playerObj);
         createPlayerRow(playerName, playerScores);
+        setCookie('stats', JSON.stringify(cStats), 2);
     }
     else {
         alert('Введенное имя некорректно');
@@ -140,13 +152,15 @@ window.onload = function () {
     curCost = getCookie('cost');
 
     // If not remember: start new game
-    if (cStats == "" || !cStats) {
+    if (cStats == "" ||  cStats == "{}" || !cStats) {
         cStats = {};
+        createBlankTable();
     }
 
     else if (curRound == "" || !curRound || curCost == "" || !curCost) {
         curRound = 1;
         curCost = 10;
+        createBlankTable();
     } 
 
     // Else render table with last stats

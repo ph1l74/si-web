@@ -7,9 +7,7 @@ body {
     margin: auto;
     margin-top: 50px;
     padding: 20px;
-    /* border: 2px solid; */
     border-radius: 6px;
-    /* border-color: #aadddd; */
     box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12) ;        
 }
 
@@ -18,6 +16,7 @@ body {
     font-weight: 400;
     font-size: 2em;
     color: rgb(0, 62, 104);
+    margin-bottom: 20px;
 }
 
 .nav {
@@ -44,8 +43,6 @@ body {
 }
 
 .rightSideNav {
-    /* float:right; */
-    /* width: 50%; */
     display: inline-flex;
     padding-right: 0px;
     height: 50px;
@@ -54,7 +51,6 @@ body {
 }
 
 #nextQuestion{
-    /* padding: 6px; */
     background: rgb(0, 125, 209);
     border-radius: 6px 0px 0px 6px;
     height: 24px;
@@ -63,8 +59,6 @@ body {
     color: white;
     cursor: pointer;
     box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);        
-    /* margin: 10px 5px; */
-    /* height: 100%; */
     border-right: 1px  solid;
     border-color: rgb(35, 165, 252);
     padding-top: 12px;
@@ -80,17 +74,12 @@ body {
 }
 
 #addPlayer{
-    /* padding: 6px; */
     background: rgb(0, 125, 209);
-    /* border-radius: 6px 0px 0px 6px; */
     height: 24px;
     width: 150px;
     text-align: center;
     color: white;
     cursor: pointer;
-    /* box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);         */
-    /* margin: 10px 5px; */
-    /* height: 100%; */
     border-right: 1px  solid;
     border-color: rgb(35, 165, 252);
     padding-top: 12px;
@@ -106,17 +95,13 @@ body {
 }
 
 #clearResults{
-    /* padding: 6px; */
     background: rgb(59, 59, 59);
     border-radius: 0px 6px 6px 0px;
-    /* height: 24px; */
     width: 200px;
     text-align: center;
     color: white;
     cursor: pointer;
     box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12) ;        
-    /* margin: 10px 0px 10px 4px; */
-    /* height: 100%; */
     padding-top: 12px;
     height: 38px;
     }
@@ -129,8 +114,15 @@ body {
     background: rgb(39, 39, 39);
 }
 
+.blankTable {
+    padding: 100px;
+    font-weight: 400;
+    font-size: 1.2em;
+    text-align: center;
+    color: rgb(0, 62, 104);
+}
+
 .playerDiv {
-    /* border: 1px solid red; */
     margin-top: 10px;
     height: 50px;
     font-weight: 400;
@@ -159,16 +151,6 @@ body {
 }
 
 .plusButton {
-    /* margin-left: 10%;
-    height: 38px;
-    width: 38px;
-    background: rgb(37, 109, 37);
-    border-radius: 4px;
-    margin: 6px 100px;
-    color: white;
-    text-align: center;
-    font-weight: 200;
-    cursor: pointer; */
     background: rgb(37, 109, 37);
     width: 25%;
     color: white;
@@ -193,16 +175,6 @@ body {
 }
 
 .minusButton {
-    /* margin-left: 10%;
-    height: 38px;
-    width: 38px;
-    background: rgb(194, 50, 50);
-    border-radius: 4px;
-    margin: 6px 100px;
-    color: white;
-    text-align: center;
-    font-weight: 200;
-    cursor:pointer; */
     background: rgb(194, 50, 50);
     width: 25%;
     color: white;
