@@ -122,6 +122,15 @@ body {
     color: rgb(0, 62, 104);
 }
 
+.blankTableTitle {
+    text-transform: uppercase;
+    font-size: 1.4em;
+}
+
+.blankTableDesc{
+    margin-top: 4px;
+}
+
 .playerDiv {
     margin-top: 10px;
     height: 50px;

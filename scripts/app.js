@@ -3,7 +3,7 @@ var curRound = 1;
 var curCost = 10;
 
 
-// getting Cookie by parmeter name
+// getting Cookie by parameter name
 function getCookie(cname) {
     var name = cname + '='
     var decodeCookie = decodeURIComponent(document.cookie);
@@ -25,14 +25,16 @@ function setCookie(cname, cvalue, exdays) {
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ';' + expires + ';path=/;'
-    // console.log('Cookie value ' + cname + ' setted to:', cvalue);
 }
 
 
-// 
+// placeholder info
 function createBlankTable() {
     var playerlist = $('#playerList');
-    blankTable = $('<div>').addClass('blankTable').text('Таблица пуста. Добавьте игрока, чтобы начать подсчет очков.') 
+    blankTable = $('<div>').addClass('blankTable');
+    blankTableTitle = $('<div>').addClass('blankTableTitle').text('Таблица пуста');
+    blankTableDesc = $('<div>').addClass('blankTableDesc').text('Добавьте игрока, чтобы начать подсчет очков'); 
+    blankTable.append(blankTableTitle).append(blankTableDesc);
     playerlist.append(blankTable);
 }
 
