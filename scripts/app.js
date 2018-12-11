@@ -99,16 +99,12 @@ function clearResults() {
     curRound = 1;
     curCost = 10;
     setCookie('stats', JSON.stringify(cStats), 2);
-    // setCookie('round', curRound + "", 2);
-    // setCookie('cost', curCost + "", 2);
     updateRoundInfo();
 }
 
 
 // adding current question cost to current player results 
 function scorePlus(e) {
-    // console.log(cStats);
-    // $('#' + e.target.parentNode.id + '_scores').text(cStats[e.target.parentNode.id].scores += curCost);
     $(e.target).prev().text(cStats[e.target.parentNode.id].scores += curCost);
     setCookie('stats', JSON.stringify(cStats), 2);
 }
@@ -116,10 +112,6 @@ function scorePlus(e) {
 
 // adding current question cost to current player results 
 function scoreMinus(e) {
-    // console.log(cStats);
-    // $('#' + e.target.parentNode.id + '_scores').text(cStats[e.target.parentNode.id].scores -= curCost);
-    // $('#' + e.target.parentNode.id + '_scores').text(cStats[e.target.parentNode.id].scores -= curCost);
-
     $(e.target).nextAll('.playerScores').text(cStats[e.target.parentNode.id].scores -= curCost);
     setCookie('stats', JSON.stringify(cStats), 2);
 }
@@ -129,8 +121,8 @@ function scoreMinus(e) {
 function updateRoundInfo() {
     $('#statusRoundSpan').text(curRound);
     $('#statusCostSpan').text(curCost);
-    setCookie('round', curRound + "", 2);
-    setCookie('cost', curCost + "", 2);
+    setCookie('round', curRound, 2);
+    setCookie('cost', curCost, 2);
 }
 
 
