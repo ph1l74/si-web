@@ -27,7 +27,7 @@ function createPlayerRow(playerName, playerScores) {
     var playerlist = $('#playerList');
     var playerDiv = $('<div>').prop({id:playerName}).addClass('playerDiv');
     minusButton = $('<div>').addClass('minusButton');
-    minusButton.click(minusButton);
+    minusButton.click(scoreMinus);
     playerNameDiv = $('<div>').addClass('playerName').text(playerName);
     playerScoresDiv = $('<div>').prop({id: playerName + '_scores'}).addClass('playerScores').text(playerScores);
     plusButton = $('<div>').addClass('plusButton');
