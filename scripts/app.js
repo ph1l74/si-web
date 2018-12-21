@@ -74,55 +74,9 @@ function checkNames(playerName) {
 }
 
 
-function createModalPlayer(){
-    var modalDivBG = $('<div>').addClass('modalBG');
-    // modalDivBG.click(function(){
-    //     $(this).remove()
-    // })
-    var modalDiv = $('<div>').addClass('modalPlayer');
-    var modalDivClose = $('<div>').addClass('modalClose');
-    var modalPlayerTitle = $('<div>').addClass('modalPlayerTitle').text("Введите имя нового игрока:");
-    var inputNameDiv = $('<div>').addClass('modalInputDiv');
-    var inputName = $('<input>').prop({ id: 'playerNameInput' });
-    var submitName = $('<div>').addClass('modalSubmit').text("Добавить");
-    modalDivBG
-        .append(modalDiv
-            .append(modalDivClose
-                .text('\u2573')
-                .click(function(){
-                    modalDivBG.remove();
-                }))
-            .append(modalPlayerTitle)
-            .append(inputNameDiv
-                .append(inputName)
-                .append(submitName)
-                )
-            );
-    $('body').prepend(modalDivBG);
-    
-}
-
-
 // adding Player to cStats-object and creating playerDiv
 function addPlayer() {
-
     createModalPlayer();
-    // var playerName = prompt("Введите имя нового игрока");
-    // var playerScores = 0
-    // if (playerName && !checkNames(playerName)) {
-    //     playerObj = {};
-    //     playerObj[playerName] = { scores: playerScores };
-    //     if (JSON.stringify(cStats) == '{}') {
-    //         $('#playerList').empty();
-    //     }
-    //     $.extend(cStats, playerObj);
-    //     createPlayerRow(playerName, playerScores);
-    //     setCookie('stats', JSON.stringify(cStats), 2);
-    // }
-    // else {
-    //     alert('Введенное имя некорректно');
-    //     return false
-    // };
 }
 
 
