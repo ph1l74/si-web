@@ -44,11 +44,16 @@ function createBlankTable() {
 function createPlayerRow(playerName, playerScores) {
     var playerlist = $('#playerList');
     var playerDiv = $('<div>').prop({ id: playerName }).addClass('playerDiv');
-    minusButton = $('<div>').addClass('minusButton');
+    var minusButton = $('<div>').addClass('minusButton');
+    var minusIcon = $('<div class="button-icon minus"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div>');
+    var playerNameDiv = $('<div>').addClass('playerName').text(playerName);
+    var playerScoresDiv = $('<div>').addClass('playerScores').text(playerScores);
+    var plusButton = $('<div>').addClass('plusButton');
+    var plusIcon = $('<div class="button-icon plus"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div>');
+
+    plusButton.append(plusIcon);
+    minusButton.append(minusIcon);
     minusButton.click(scoreMinus);
-    playerNameDiv = $('<div>').addClass('playerName').text(playerName);
-    playerScoresDiv = $('<div>').addClass('playerScores').text(playerScores);
-    plusButton = $('<div>').addClass('plusButton');
     plusButton.click(scorePlus);
     playerlist.append(playerDiv);
     playerDiv.append(minusButton).append(playerNameDiv).append(playerScoresDiv).append(plusButton);
@@ -75,8 +80,9 @@ function checkNames(playerName) {
 
 
 // adding Player to cStats-object and creating playerDiv
-function addPlayer() {
-    var playerName = prompt("Введите имя нового игрока");
+function addPlayer(name) {
+    // var playerName = $('#modal-input').val();
+    var playerName = name;
     var playerScores = 0
     if (playerName && !checkNames(playerName)) {
         playerObj = {};
@@ -145,28 +151,165 @@ function nextQuestion() {
     updateRoundInfo();
 }
 
-function showSettings(e) {
+function showSettings(e, timeline) {
     var settingsButton = $(e.target).parent();
+    var gearIcon = $('.button-icon.settings').first();
 
-    if (!settingsButton.attr('class')) {
+    if (!settingsButton.hasClass('active')) {
         settingsButton.addClass('active');
-        $('#settingsBar').show('blind', 250);
+        gearIcon.children().first().addClass('spin');
+        timeline.play();
     }
     else {
-        $('#settingsBar').hide('blind', 250);
         settingsButton.removeClass('active');
+        gearIcon.children().first().removeClass('spin');
+        timeline.reverse();
     }
+
 }
 
 function setCost(cost) {
     curCost = cost;
     $('.cost-selector').each(function (index, el) {
         $(el).removeClass('active');
-        
+
     });
-    $('li[cost="'+cost+'"]').addClass('active');
+    $('li[cost="' + cost + '"]').addClass('active');
     $('#statusCostSpan').text(cost);
     setCookie('cost', cost, 2);
+}
+
+function createInputModal(text) {
+    var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
+    var modalBg = $('<div>').addClass('modal-bg');
+    var modalWindow = $('<div>').addClass('modal-window');
+    var modalButtons = $('<div>').addClass('modal-buttons');
+    var modalText = $('<div>').addClass('modal-text');
+    var modalInput = $('<input>').addClass('modal-input').prop({ id: 'modalInput' });
+    var modalAccept = $('<div>').addClass('modal-accept');
+    var modalCancel = $('<div>').addClass('modal-cancel');
+
+    modalCancel.text('Отмена');
+    modalAccept.text('Добавить');
+
+    modalText.text(text);
+    modalWindow.append([modalText, modalInput]);
+    modalButtons.append([modalCancel, modalAccept]);
+    modalBg.append([modalWindow, modalButtons]);
+    modalDiv.append(modalBg);
+    $('body').prepend(modalDiv);
+
+    const t0 = new TimelineLite({ paused: true });
+    t0.fromTo(".modal-accept", 0.25,
+        {
+            opacity: 0,
+            x: 60,
+            width: 60,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            x: 0,
+            width: 120
+            // ease: Power0
+        });
+
+    modalInput.on('keyup', function (e, timeline) {
+        var input = $(e.target);
+        if (input.val().length >= 3 && !input.hasClass('good')) {
+            input.addClass('good');
+            t0.play();
+        }
+        else if (input.val().length < 3 && input.hasClass('good')) {
+            console.log('hide');
+            input.removeClass('good');
+            t0.reverse();
+        }
+
+    });
+
+    modalAccept.on('click', function(e) {
+        console.log($('#modalInput').val());
+        addPlayer($('#modalInput').val());
+    })
+
+    const t1 = new TimelineLite({
+        paused: true,
+        onReverseComplete: function () {
+            $('#modal').remove();
+        }
+    });
+    t1.to(".main", 0, {
+        webkitFilter: "blur(2px)",
+    }).fromTo(".modal-bg", 0.25,
+            {
+                opacity: 0,
+                ease: Power0
+            },
+            {
+                opacity: 1,
+            }
+        ).fromTo(".modal-window", 0.25,
+            {
+                opacity: 0,
+                y: -70,
+                ease: Power0
+            },
+            {
+                opacity: 1,
+                y: 0
+            }
+        ).fromTo(".modal-cancel", 0.25,
+            {
+                opacity: 0,
+                x: -60,
+                width: 60,
+                ease: Power0
+            },
+            {
+                opacity: 1,
+                width: 120,
+                x: 0
+            });
+
+    const t2 = new TimelineLite({ paused: true });
+
+    t2.to(".modal-accept", 0.25, {
+        opacity: 0,
+        x: 60,
+        width: 60
+    })
+
+    t1.play();
+
+    modalCancel.on('click', function () {
+        if ($('#modalInput').hasClass('good')) {
+            t2.play();
+            TweenLite.delayedCall(0.25, function () {
+                t1.reverse();
+            })
+        }
+        else {
+            t1.reverse();
+        }
+        // t1;
+    })
+}
+
+function createConfirmModal() {
+    var modalDiv = $('<div>').addClass('modal');
+    var modalBg = $('<div>').addClass('modal-bg');
+    var modalWindow = $('<div>').addClass('modal-window');
+    var modalButtons = $('<div>').addClass('modal-buttons');
+    var modalText = $('<div>').addClass('modal-text');
+    var modalInput = $('<input>').addClass('modal-input');
+    var modalCancel = $('<div>').addClass('modal-cancel');
+    var modalAccept = $('<div>').addClass('modal-accept');
+
+    // modalButtons.append(modal)
+
+
+    // $('body').prepend()
 }
 
 
@@ -201,13 +344,50 @@ window.onload = function () {
         setCost(parseInt(curCost, 10));
     }
 
+    // Animation
+    const t1 = new TimelineLite({ paused: true });
+    t1.fromTo("#settingsBar .button:nth-child(1)", 0.1,
+        {
+            opacity: 0,
+            x: -70,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            x: 0
+        }
+    ).fromTo("#settingsBar .button:nth-child(2)", 0.1,
+        {
+            opacity: 0,
+            x: -70,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            x: 0
+        }
+    ).fromTo("#settingsBar .button:nth-child(3)", 0.1,
+        {
+            opacity: 0,
+            x: -70,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            x: 0
+        });
+
     // linking functions to buttons
-    $('#settings').click(showSettings);
-    $('#addPlayer').click(addPlayer);
+    $('#settingsButton').on('click', function () {
+        showSettings(event, t1)
+    });
+    $('#addPlayer').on('click', function(){
+        createInputModal('Введите имя игрока');
+    });
     $('#clearResults').click(clearResults);
     $('#nextQuestion').click(nextQuestion);
     $('.cost-selector').each(function (index, el) {
-        $(el).click(function(){
+        $(el).click(function () {
             setCost($(el).attr('cost'));
         });
     });

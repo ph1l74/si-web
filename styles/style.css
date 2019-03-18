@@ -1,17 +1,87 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: lightgrey;
-    color: rgb(0, 62, 104);
+    background: #232526;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #414345, #232526);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #414345, #232526);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /* height: 100%; */
+    color: rgba(30, 39, 46,1.0);
+    /* height: 100% */
 }
 
 .main {
-    width: 80%;
+    max-width: 600px;
     margin: auto;
-    margin-top: 50px;
-    padding: 20px;
+    margin-top: 40px;
+    /* padding: 20px; */
+    /* border-radius: 6px; */
+    /* background: rgb(255, 255, 255); */
+    /* position: relative; */
+}
+
+.settings {
+    height: 62px;
+}
+
+#settingsButton {
+    /* position: absolute; */
+    /* right: -1px; */
+    float: right;
+}
+
+.button {
+    transition: all 0.25s;
+    padding: 6px;
+    width: 50px;
+    height: 50px;
     border-radius: 6px;
-    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    background: white;
+    background: rgb(255, 255, 255);
+    text-align: center;
+    font-size: 2em;
+    color: grey;
+    cursor: pointer;
+}
+
+#settingsBar .button {
+    display: inline-block;
+    opacity: 0;
+}
+
+.button:hover {
+    color: rgb(201, 201, 201);
+}
+
+.button.active {
+    color: rgb(0, 62, 104);
+}
+
+i.material-icons {
+    font-size: 1.2em;
+    margin-top: 6px;
+}
+
+.button-icon {
+    transition: 0.5s fill;
+    margin: 6px auto;
+    fill: lightgray;
+}
+
+.button-icon:hover {
+    fill: grey;
+}
+
+.button-icon .nightmode{
+
+}
+
+.spin {
+    animation: spin 0.25s 1 ease-out;
 }
 
 .header {
@@ -20,21 +90,6 @@ body {
     font-size: 1.7em;
     color: rgb(0, 62, 104);
     margin-bottom: 20px;
-}
-
-#settings {
-    transition: all 0.5s;
-    float: right;
-    color: grey;
-    cursor: pointer;
-}
-
-#settings:hover {
-    color: rgb(201, 201, 201);
-}
-
-#settings.active {
-    color: rgb(0, 62, 104);
 }
 
 .nav {
@@ -68,55 +123,9 @@ body {
     border-radius: 6px;
 }
 
-#nextQuestion, #addPlayer, #clearResults {
-    transition: all 0.5s;
-    text-align: center;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    border-right: 1px solid;
-    border-color: rgb(35, 165, 252);
-    padding: 4px 6px 8px 6px;
-    height: 38px;
-}
-
-#nextQuestion {
-    border-radius: 6px 0px 0px 6px;
-    background: rgb(0, 125, 209);
-    width: 33%;
-}
-
-#addPlayer {
-    background: rgb(0, 125, 209);
-    width: 33%;
-}
-
-#nextQuestion:hover, #addPlayer:hover {
-    background: rgb(35, 165, 252);
-}
-
-#nextQuestion:active #addPlayer:active {
-    background: rgb(0, 62, 104);
-}
-
-#clearResults {
-    background: rgb(59, 59, 59);
-    border-radius: 0px 6px 6px 0px;
-    width: 34%;
-    border-right: 0px;
-}
-
-#clearResults:hover {
-    background: rgb(117, 117, 117);
-}
-
-#clearResults:active {
-    background: rgb(39, 39, 39);
-}
-
 #settingsBar {
-    height: 60px;
-    display: none;
+    /* height: 60px; */
+    /* display: none; */
 }
 
 #settingsBar ul {
@@ -126,11 +135,6 @@ body {
     font-weight: 200;
     font-size: 1.2em;
     color: rgb(0, 62, 104);
-}
-
-#settingsBar>div {
-    height: 60px;
-    line-height: 3.3rem;
 }
 
 .cost-title {
@@ -186,15 +190,21 @@ body {
 }
 
 .playerDiv {
+    /* opacity: 0; */
     margin-top: 10px;
-    height: 50px;
+    height: 60px;
     font-weight: 400;
     font-size: 24px;
-    display: flex;
+    /* display: flex; */
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
-    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    background: white;
+    border-radius: 6px
+}
+
+.playerDiv .minusButton, .playerDiv .playerName, .playerDiv .playerScores, .playerDiv .plusButton {
+    display: inline-block;
 }
 
 .buttonSection {
@@ -213,290 +223,168 @@ body {
     padding: 6px 14px;
 }
 
-.plusButton {
+.minusButton, .plusButton {
     transition: all 0.5s;
-    background: rgb(37, 109, 37);
-    width: 25%;
-    color: white;
+    width: 60px;
+    height: 60px;
+    background: white;
     text-align: center;
     font-weight: 200;
     cursor: pointer;
-    border-radius: 0px 6px 6px 0px;
     font-size: 1.4em;
 }
 
-.plusButton::before {
-    content: '+';
-}
-
-.plusButton:hover {
-    background: rgb(60, 173, 60);
-}
-
-.plusButton:active {
-    background: rgb(11, 68, 11);
+.plusButton {
+    color: rgb(37, 109, 37);
+    border-radius: 6px 0px 0px 6px;
 }
 
 .minusButton {
-    transition: all 0.5s;
-    background: rgb(194, 50, 50);
-    width: 25%;
-    color: white;
-    text-align: center;
-    font-weight: 200;
-    cursor: pointer;
+    color: rgb(194, 50, 50);
     border-radius: 6px 0px 0px 6px;
-    font-size: 1.4em;
 }
 
-.minusButton::before {
-    content: '-';
-    display: block;
+.plusButton:hover {
+    color: rgb(60, 173, 60);
+}
+
+.plusButton:active {
+    color: rgb(11, 68, 11);
 }
 
 .minusButton:hover {
-    background: rgb(230, 37, 37);
+    color: rgb(230, 37, 37);
 }
 
 .minusButton:active {
-    background: rgb(90, 15, 15);
+    color: rgb(90, 15, 15);
 }
 
-@media screen and (max-width: 840px) and (orientation: landscape) {
-    .main {
-        /* margin-top: 20px; */
-        margin: 20px auto;
-        padding: 10px;
-    }
-    .header {
-        font-size: 1.4em;
-        text-align: center;
-    }
-    .playerName {
-        overflow: hidden;
-        overflow-wrap: break-word;
-        /* font-size: 12px; */
-        text-align: left;
-        /* padding: 16px 14px; */
-    }
-    .playerScores {
-        /* font-size: 14px; */
-        text-align: right;
-        /* padding: 14px 14px; */
-    }
-    .leftSideNav {
-        width: 44%;
-    }
-    #nextQuestion, #addPlayer, #clearResults {
-        padding: 4px 6px 8px 6px
-    }
-    .blankTable {
-        padding: 20px;
-    }
-    #settings {
-        font-size: 1em;
-        float: right
-    }
+.modal {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
 }
 
-@media screen and (max-width: 420px) and (orientation: portrait) {
-    .header {
-        text-align: center;
-        font-size: 1.3em;
-        margin-bottom: 10px;
-    }
-    .nav {
-        height: 130px;
-    }
-    .leftSideNav {
-        width: 100%
-    }
-    .rightSideNav {
-        display: inline-flex;
-        width: 100%;
-        margin-top: 10px;
-        height: 60px;
-        font-size: 12px;
-    }
-    #nextQuestion, #addPlayer, #clearResults {
-        height: 48px;
-        padding: 12px 6px 0px 6px;
-    }
-    .playerName {
-        overflow: hidden;
-        overflow-wrap: break-word;
-        font-size: 12px;
-        text-align: left;
-        padding: 16px 14px;
-    }
-    .playerScores {
-        font-size: 14px;
-        text-align: right;
-        padding: 14px 14px;
-    }
-    .blankTable {
-        padding: 10px;
-    }
-    .blankTableTitle {
-        font-size: 1.1em;
-    }
-    .blankTableTitle {
-        font-size: 1em;
-    }
+.modal-bg {
+    background: rgba(0, 0, 0, 0.7);
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    position: absolute;
+    width: 100%;
 }
 
-@media screen and (max-width: 694px) and (orientation: portrait) {
-    .header {
-        text-align: center;
-        font-size: 1.3em;
-        margin-bottom: 10px;
+.modal-window {
+    width: 560px;
+    border-radius: 6px;
+    height: 120px;
+    background: white;
+    margin: 20% auto;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-text {
+    font-weight: 400;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+}
+
+.modal-input {
+    transition: 0.5s all;
+    outline: none;
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    height: 60px;
+    font-size: 1.2em;
+    border-radius: 6px;
+    padding-left: 4px;
+    width: 550px;
+}
+
+.modal-input {
+    border-color: red;
+}
+
+.good {
+    border-color: green;
+}
+
+.modal-buttons {
+    width: 600px;
+    height: 0px;
+    margin: auto;
+}
+
+.modal-accept,
+.modal-cancel {
+    border-radius: 6px;
+    height: 60px;
+    opacity: 1;
+    font-weight: 400;
+    font-size: 1.2em;
+    color: white;
+    line-height: 3em;
+    text-align: center;
+    cursor: pointer;
+    width: 120px;
+}
+
+.modal-accept {
+    opacity: 0;
+    float: right;
+    background: rgb(108, 196, 91);
+}
+
+.modal-cancel {
+    float: left;
+    background: rgb(196, 91, 91);
+}
+
+@-ms-keyframes spin {
+    from {
+        -ms-transform: rotate(0deg);
     }
-    .nav {
-        height: 130px;
-    }
-    .leftSideNav {
-        width: 100%
-    }
-    .rightSideNav {
-        display: inline-flex;
-        width: 100%;
-        margin-top: 10px;
-        height: 60px;
-        font-size: 0.8em;
-    }
-    #nextQuestion, #addPlayer, #clearResults {
-        height: 48px;
-        padding: 12px 6px 0px 6px;
-    }
-    .playerName {
-        overflow: hidden;
-        overflow-wrap: break-word;
-        font-size: 0.8em;
-        text-align: left;
-        padding: 10px 14px;
-    }
-    .playerScores {
-        font-size: 1em;
-        text-align: right;
-        padding: 8px 14px;
-    }
-    .blankTable {
-        padding: 10px;
-    }
-    .blankTableTitle {
-        font-size: 1.1em;
-    }
-    .blankTableTitle {
-        font-size: 1em;
-    }
-    #settings {
-        transition: all 0.5s;
-        float: right;
-        color: grey;
-        cursor: pointer;
-        position: absolute;
-        right: 42px;
-        font-size: 2em;
-        top: 132px;
-    }
-    #settingsBar>div {
-        height: 60px;
-        line-height: 1;
-    }
-    .cost-title {
-        font-weight: 200;
-        font-size: 1.2em;
-        display: block;
-        text-align: center;
-    }
-    .cost-list {
-        display: block;
-        margin-top: 12px;
-        text-align: center;
-    }
-    #settingsBar ul li {
-        margin-left: 2px;
+    to {
+        -ms-transform: rotate(180deg);
     }
 }
 
-@media screen and (max-width: 648px) and (orientation: landscape) {
-    .header {
-        text-align: center;
-        font-size: 1.3em;
-        margin-bottom: 10px;
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
     }
-    .nav {
-        height: 104px;
-    }
-    .leftSideNav {
-        width: 100%
-    }
-    .rightSideNav {
-        display: inline-flex;
-        width: 100%;
-        margin-top: 10px;
-        height: 42px;
-        font-size: 12px;
-    }
-    #nextQuestion, #addPlayer, #clearResults {
-        height: 30px;
-        padding: 12px 6px 0px 6px;
-    }
-    .playerName {
-        overflow: hidden;
-        overflow-wrap: break-word;
-        font-size: 12px;
-        text-align: left;
-        padding: 16px 14px;
-    }
-    .playerScores {
-        font-size: 14px;
-        text-align: right;
-        padding: 14px 14px;
-    }
-    .blankTable {
-        padding: 10px;
-    }
-    .blankTableTitle {
-        font-size: 1.1em;
-    }
-    .blankTableTitle {
-        font-size: 1em;
-    }
-    #settingsBar>div {
-        height: 60px;
-    }
-    .cost-title {
-        font-size: 1em;
-    }
-    #settingsBar ul {
-        font-size: 1em;
-    }
-    #settingsBar ul li {
-        margin-left: 14px;
+    to {
+        -moz-transform: rotate(180deg);
     }
 }
 
-@media screen and (min-width: 1058px) and (orientation: landscape) {
-    #addPlayer {
-        padding: 12px 6px 0px 6px;
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(180deg);
     }
 }
 
-@media screen and (min-width: 1214px) and (orientation: landscape) {
-    #nextQuestion {
-        padding: 12px 6px 0px 6px;
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
     }
 }
 
-@media screen and (min-width: 1214px) and (orientation: landscape) {
-    #nextQuestion {
-        padding: 12px 6px 0px 6px;
+@keyframes appear {
+    from {
+        transform: translateY(-30px);
     }
-}
-
-@media screen and (min-width: 1247px) and (orientation: landscape) {
-    #clearResults {
-        padding: 12px 6px 0px 6px;
+    to {
+        transform: translateY(0px);
     }
 }
