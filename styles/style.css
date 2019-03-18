@@ -3,12 +3,17 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    /* font-family: 'Segoe UI', sans-serif; */
+    font-family: 'Roboto Slab', serif;
+    /* font-family: 'Montserrat', sans-serif; */
+    /* font-family: 'Ubuntu', sans-serif; */
+    /* font-family: 'Open Sans', sans-serif; */
+
     background: #232526;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(195deg, rgba(48, 51, 107, 1.0), rgba(19, 15, 64, 1.0));
+    background: -webkit-linear-gradient(195deg, rgba(53, 59, 72,1.0), rgba(47, 54, 64,1.0));
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(195deg, rgba(48, 51, 107, 1.0), rgba(19, 15, 64, 1.0));
+    background: linear-gradient(195deg, rgba(53, 59, 72,1.0), rgba(47, 54, 64,1.0));
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     /* height: 100%; */
     color: rgba(30, 39, 46, 1.0);
@@ -20,10 +25,11 @@ body {
     font-weight: 400;
     font-size: 1.7em;
     /* color: rgb(0, 62, 104); */
-    margin-bottom: 20px;
     color: rgba(223, 249, 251, 1.0);
     text-align: center;
     margin: auto;
+    margin-bottom: 30px;
+    margin-top: 60px;
     height: 60px;
 }
 
@@ -53,11 +59,15 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 6px;
-    background: rgb(255, 255, 255);
+    background: rgba(245, 246, 250, 1.0);
     text-align: center;
     font-size: 2em;
     color: grey;
     cursor: pointer;
+}
+
+#settingsBar {
+    display: none;
 }
 
 #settingsBar .button {
@@ -92,6 +102,10 @@ i.material-icons {
     fill: rgba(128, 142, 155, 1.0);
 }
 
+#nightMode {
+    display: none !important;
+}
+
 .button-icon.nightmode {
     -moz-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
@@ -108,7 +122,8 @@ i.material-icons {
 }
 
 .blankTable {
-    padding: 100px;
+    /* padding: 100px; */
+    margin-top: 60px;
     font-weight: 400;
     font-size: 1.2em;
     text-align: center;
@@ -129,14 +144,19 @@ i.material-icons {
     height: 60px;
     font-weight: 400;
     font-size: 1.2em;
+    line-height: 1;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
-    background: white;
+    background: rgba(245, 246, 250, 1.0);
     border-radius: 6px;
     display: table;
     width: 100%;
     vertical-align: middle;
+}
+
+.playerDiv:nth-child(1) {
+    margin-top: 30px;
 }
 
 .playerDiv .minusButton, .playerDiv .playerName, .playerDiv .playerScores, .playerDiv .plusButton {
@@ -150,8 +170,8 @@ i.material-icons {
     text-align: left;
     vertical-align: middle;
     /* height: 60px; */
-    padding-left: 10px;
-    word-break:break-all;
+    padding-left: 20px;
+    word-break: break-all;
 }
 
 .playerScores {
@@ -176,7 +196,7 @@ i.material-icons {
 }
 
 .button-icon.plus {
-    fill: rgba(106, 176, 76,1.0);
+    fill: rgba(106, 176, 76, 1.0);
     /* margin-top: 8px !important; */
     /* margin-top: 12px;
     margin-bottom: 0px; */
@@ -184,7 +204,7 @@ i.material-icons {
 }
 
 .button-icon.minus {
-    fill: rgba(235, 77, 75, 1.0);
+    fill: rgba(232, 65, 24,1.0);
     /* margin-top: 8px !important; */
     /* margin-top: 12px;
     margin-bottom: 0px; */
@@ -193,7 +213,6 @@ i.material-icons {
 
 .minusButton {
     /* float: left; */
-
 }
 
 .modal {
@@ -206,7 +225,7 @@ i.material-icons {
 }
 
 .modal-bg {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     margin: 0px;
     padding: 0px;
     height: 100%;
@@ -218,7 +237,7 @@ i.material-icons {
     width: 560px;
     border-radius: 6px;
     height: 120px;
-    background: rgba(223, 249, 251, 1.0);
+    background: rgba(245, 246, 250, 1.0);
     margin: 20% auto;
     padding: 20px;
     margin-bottom: 20px;
@@ -240,16 +259,15 @@ i.material-icons {
     border-radius: 6px;
     padding-left: 4px;
     width: 550px;
-    background: rgba(223, 249, 251, 1.0);
+    background: rgba(245, 246, 250, 1.0);
 }
 
 .modal-input {
-    border-color: rgba(255, 63, 52, 1.0);
-    ;
+    border-color: rgba(232, 65, 24,1.0);
 }
 
 .good {
-    border-color: green;
+    /* border-color: rgba(194, 54, 22,1.0); */
 }
 
 .modal-buttons {
@@ -275,20 +293,20 @@ i.material-icons {
 .modal-accept {
     opacity: 0;
     float: right;
-    background: rgba(34, 166, 179, 1.0);
+    background: rgba(0, 168, 255,1.0);
 }
 
 .modal-cancel {
     float: left;
-    background: rgba(235, 77, 75, 1.0);
+    background: rgba(232, 65, 24,1.0);
 }
 
 .modal-accept:hover {
-    background: rgba(126, 214, 223, 1.0);
+    background: rgba(0, 151, 230,1.0);
 }
 
 .modal-cancel:hover {
-    background: rgba(255, 121, 121, 1.0);
+    background: rgba(194, 54, 22,1.0);
 }
 
 @-ms-keyframes spin {

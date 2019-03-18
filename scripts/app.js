@@ -37,6 +37,23 @@ function createBlankTable() {
     blankTableDesc = $('<div>').addClass('blankTableDesc').text('Добавьте игрока, чтобы начать подсчет очков');
     blankTable.append(blankTableTitle).append(blankTableDesc);
     playerlist.append(blankTable);
+
+    const t1 = new TimelineLite({ paused: true });
+
+    t1.staggerFromTo(".blankTable *", 0.5, {
+        opacity: 0,
+        y: -10
+    }, {
+            opacity: 1,
+            y: 0
+        }, 0.1)
+
+    t1.play();
+}
+
+function createScoresDiv() {
+    var scoresDiv = $('<div>').prop({ id: 'scoresDiv' }).addClass('scores-div');
+    
 }
 
 
@@ -56,7 +73,28 @@ function createPlayerRow(playerName, playerScores) {
     minusButton.click(scoreMinus);
     plusButton.click(scorePlus);
     playerlist.append(playerDiv);
-    playerDiv.append(minusButton).append(playerNameDiv).append(playerScoresDiv).append(plusButton);
+    playerDiv.append([playerNameDiv, playerScoresDiv, minusButton, plusButton]);
+
+    function animateCreation(playerId) {
+        const animation = new TimelineLite({ paused: true });
+        var id = '#' + playerId;
+        console.log(id)
+        animation.fromTo(
+            id,
+            0.5,
+            {
+                opacity: 0,
+                y: -70
+            }, {
+                opacity: 1,
+                y: 0
+            }
+        );
+        animation.play();
+    }
+
+    animateCreation(playerName)
+
 }
 
 
@@ -72,10 +110,10 @@ function clearPlayerList() {
 function checkNames(playerName) {
     for (var player in cStats) {
         if (player == playerName) {
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 
@@ -84,7 +122,7 @@ function addPlayer(name) {
     // var playerName = $('#modal-input').val();
     var playerName = name;
     var playerScores = 0
-    if (playerName && !checkNames(playerName)) {
+    if (playerName) {
         playerObj = {};
         playerObj[playerName] = { scores: playerScores };
         if (JSON.stringify(cStats) == '{}') {
@@ -94,21 +132,36 @@ function addPlayer(name) {
         createPlayerRow(playerName, playerScores);
         setCookie('stats', JSON.stringify(cStats), 2);
     }
-    else {
-        alert('Введенное имя некорректно');
-        return false
-    };
 }
 
 
 // clearing all results from cStats and writing it to Cookie
 function clearResults() {
-    clearPlayerList();
-    cStats = {};
-    curRound = 1;
-    setCost(10);
-    setCookie('stats', JSON.stringify(cStats), 2);
-    updateRoundInfo();
+
+    const t1 = new TimelineLite({
+        paused: true,
+        onComplete: function () {
+            clearPlayerList();
+            cStats = {};
+            curRound = 1;
+            setCost(10);
+            setCookie('stats', JSON.stringify(cStats), 2);
+            updateRoundInfo();
+        }
+    });
+    t1.staggerFromTo(".playerDiv", 0.5,
+        {
+            opacity: 1,
+            x: 0,
+            ease: Power0
+        },
+        {
+            opacity: 0,
+            x: -70
+        }, -0.1
+    );
+
+    t1.play();
 }
 
 
@@ -156,6 +209,7 @@ function showSettings(e, timeline) {
     if (!settingsButton.hasClass('active')) {
         settingsButton.addClass('active');
         gearIcon.children().first().addClass('spin');
+        $('#settingsBar').show();
         timeline.play();
     }
     else {
@@ -190,7 +244,7 @@ function createInputModal(text) {
     modalCancel.text('Отмена');
     modalAccept.text('Добавить');
 
-    modalText.text("'Введите имя игрока'");
+    modalText.text("Введите имя нового игрока");
     modalWindow.append([modalText, modalInput]);
     modalButtons.append([modalCancel, modalAccept]);
     modalBg.append([modalWindow, modalButtons]);
@@ -198,7 +252,7 @@ function createInputModal(text) {
     $('body').prepend(modalDiv);
 
     const t0 = new TimelineLite({ paused: true });
-    t0.fromTo(".modal-accept", 0.25,
+    t0.fromTo(".modal-accept", 0.15,
         {
             opacity: 0,
             x: 60,
@@ -212,23 +266,103 @@ function createInputModal(text) {
             // ease: Power0
         });
 
+    const animateGoodBorder = new TimelineLite({ paused: true });
+    animateGoodBorder.to('.modal-input', 0.15, {
+        borderColor: 'rgba(68, 189, 50, 1.0)'
+    });
+
+    const animateAcceptedBorder = new TimelineLite({ paused: true });
+    animateAcceptedBorder.to('.modal-input', 0.15, {
+        borderColor: 'rgba(0, 168, 255, 1.0)'
+    });
+
     modalInput.on('keyup', function (e, timeline) {
         var input = $(e.target);
-        if (input.val().length > 0 && !input.hasClass('good')) {
-            input.addClass('good');
-            t0.play();
+
+        if (input.val().length > 0) {
+            if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && input.val().replace(/ /g,'').length > 0) {
+                if (!input.hasClass('good')) {
+                    input.addClass('good');
+                    t0.play();
+                    animateGoodBorder.play();
+                }
+            }
+            else {
+                if (input.hasClass('good')) {
+                    input.removeClass('good');
+                }
+                t0.reverse();
+                animateGoodBorder.reverse();
+            }
         }
-        else if (input.val().length < 1 && input.hasClass('good')) {
-            console.log('hide');
-            input.removeClass('good');
+        else {
+            if (input.hasClass('good')) {
+                input.removeClass('good');
+            }
             t0.reverse();
+            animateGoodBorder.reverse();
         }
+
+
+        // if (input.val().length > 0) {
+        //     if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && !input.hasClass('good')) {
+        //         input.addClass('good');
+        //         t0.play();
+        //         animateGoodBorder.play();
+        //     }
+        //     else {
+        //         input.removeClass('good');
+        //         t0.reverse();
+        //         animateGoodBorder.reverse();
+        //     }
+        // }
+
+        // if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
+
+        // }
+        // else if (input.val().length > 0 && ) {
+
+        // }
+        // else if (input.val().length < 1 && input.hasClass('good')) {
+
+        // }
 
     });
 
+    function animatedTextChange(text, classname, delay) {
+        const animation = new TimelineLite({
+            paused: true,
+            onComplete: function () {
+                $(classname).first().text(text);
+                animation.reverse();
+            }
+        });
+        animation.to(classname, delay, {
+            opacity: 0
+        })
+        animation.play();
+    }
+
+
     modalAccept.on('click', function (e) {
-        console.log($('#modalInput').val());
-        addPlayer($('#modalInput').val());
+        var playerName = $('#modalInput').val().replace(/ /g,'');
+        if (checkNames(playerName)) {
+            addPlayer(playerName);
+            animatedTextChange("Игрок добавлен", '.modal-text', 0.15);
+            animateAcceptedBorder.play();
+            setTimeout(function () {
+                animatedTextChange("Введите имя нового игрока", '.modal-text', 0.15);
+                animateAcceptedBorder.reverse();
+                animateGoodBorder.reverse();
+            }, 1000);
+            $('#modalInput').val('');
+        }
+        else {
+            animatedTextChange("Такое имя игрока уже существует", '.modal-text', 0.15);
+            setTimeout(function () {
+                animatedTextChange("Введите имя нового игрока", '.modal-text', 0.15);
+            }, 2000);
+        }
     })
 
     const t1 = new TimelineLite({
@@ -383,7 +517,6 @@ function createConfirmModal() {
     })
 }
 
-
 window.onload = function () {
     // Getting last session info
     cStats = getCookie('stats');
@@ -416,18 +549,23 @@ window.onload = function () {
     }
 
     // Animation
-    const t1 = new TimelineLite({ paused: true });
+    const t1 = new TimelineLite({
+        paused: true,
+        onReverseComplete: function () {
+            $('#settingsBar').hide();
+        }
+    });
     t1.staggerFromTo("#settingsBar .button", 0.15,
         {
             opacity: 0,
             x: -70,
-            ease: Power0
+            ease: Linear.easeNone
         },
         {
             opacity: 1,
             x: 0
         }, 0.1
-    ).to(".button-icon.nightmode", 0.2, {
+    ).to(".button-icon.nightmode", 0.15, {
         rotation: "-=45",
         ease: Linear.easeNone
     }, '+=0.1');
