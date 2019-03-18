@@ -6,13 +6,25 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background: #232526;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #414345, #232526);
+    background: -webkit-linear-gradient(195deg, rgba(48, 51, 107, 1.0), rgba(19, 15, 64, 1.0));
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #414345, #232526);
+    background: linear-gradient(195deg, rgba(48, 51, 107, 1.0), rgba(19, 15, 64, 1.0));
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     /* height: 100%; */
-    color: rgba(30, 39, 46,1.0);
+    color: rgba(30, 39, 46, 1.0);
     /* height: 100% */
+}
+
+.header {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 1.7em;
+    /* color: rgb(0, 62, 104); */
+    margin-bottom: 20px;
+    color: rgba(223, 249, 251, 1.0);
+    text-align: center;
+    margin: auto;
+    height: 60px;
 }
 
 .main {
@@ -69,107 +81,30 @@ i.material-icons {
 .button-icon {
     transition: 0.5s fill;
     margin: 6px auto;
-    fill: lightgray;
+    fill: rgba(72, 84, 96, 1.0);
 }
 
 .button-icon:hover {
-    fill: grey;
+    fill: rgba(128, 142, 155, 1.0);
 }
 
-.button-icon .nightmode{
+.button-icon:active {
+    fill: rgba(128, 142, 155, 1.0);
+}
 
+.button-icon.nightmode {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph;
+    /*IE*/
+    filter: fliph;
+    /*IE*/
 }
 
 .spin {
     animation: spin 0.25s 1 ease-out;
-}
-
-.header {
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 1.7em;
-    color: rgb(0, 62, 104);
-    margin-bottom: 20px;
-}
-
-.nav {
-    height: 60px;
-    margin-bottom: 6px;
-    margin-top: 6px;
-}
-
-#statusRound {
-    font-weight: 400;
-    font-size: 1.2em;
-    color: rgb(0, 62, 104);
-}
-
-#statusCost {
-    font-weight: 200;
-    font-size: 1.2em;
-    color: rgb(0, 62, 104);
-}
-
-.leftSideNav {
-    float: left;
-    width: 50%;
-}
-
-.rightSideNav {
-    display: flex;
-    padding-right: 0px;
-    height: 50px;
-    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 6px;
-}
-
-#settingsBar {
-    /* height: 60px; */
-    /* display: none; */
-}
-
-#settingsBar ul {
-    margin-block-start: 0;
-    margin-block-end: 0;
-    padding-inline-start: 0;
-    font-weight: 200;
-    font-size: 1.2em;
-    color: rgb(0, 62, 104);
-}
-
-.cost-title {
-    font-weight: 200;
-    font-size: 1.2em;
-    display: inline-block;
-}
-
-.cost-list {
-    display: inline-block;
-}
-
-#settingsBar ul li {
-    transition: all 0.5s;
-    display: inline;
-    list-style-type: none;
-    cursor: pointer;
-    font-size: 1.2em;
-    border: 2px solid rgb(0, 125, 209);
-    border-radius: 25px;
-    font-weight: 400;
-    padding: 2px 6px 4px 6px;
-    box-shadow: 0 0.005em 0.01em 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    margin-left: 10px;
-}
-
-#settingsBar ul li:hover {
-    border: 2px solid rgb(35, 165, 252);
-    background: rgb(35, 165, 252);
-    color: white;
-}
-
-#settingsBar ul li.active {
-    color: rgb(255, 255, 255);
-    background: rgb(0, 125, 209);
 }
 
 .blankTable {
@@ -177,7 +112,7 @@ i.material-icons {
     font-weight: 400;
     font-size: 1.2em;
     text-align: center;
-    color: rgb(0, 62, 104);
+    color: rgba(223, 249, 251, 1.0);
 }
 
 .blankTableTitle {
@@ -190,44 +125,46 @@ i.material-icons {
 }
 
 .playerDiv {
-    /* opacity: 0; */
     margin-top: 10px;
     height: 60px;
     font-weight: 400;
-    font-size: 24px;
-    /* display: flex; */
+    font-size: 1.2em;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
     background: white;
-    border-radius: 6px
+    border-radius: 6px;
+    display: table;
+    width: 100%;
+    vertical-align: middle;
 }
 
 .playerDiv .minusButton, .playerDiv .playerName, .playerDiv .playerScores, .playerDiv .plusButton {
-    display: inline-block;
-}
-
-.buttonSection {
-    width: 25%;
+    /* display: inline-block; */
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .playerName {
-    width: 25%;
-    text-align: center;
-    padding: 6px 14px;
+    width: 60%;
+    text-align: left;
+    vertical-align: middle;
+    /* height: 60px; */
+    padding-left: 10px;
+    word-break:break-all;
 }
 
 .playerScores {
-    width: 25%;
-    text-align: center;
-    padding: 6px 14px;
+    width: 20%;
+    text-align: right;
+    vertical-align: middle;
+    padding-right: 10px;
 }
 
 .minusButton, .plusButton {
     transition: all 0.5s;
     width: 60px;
     height: 60px;
-    background: white;
     text-align: center;
     font-weight: 200;
     cursor: pointer;
@@ -235,29 +172,28 @@ i.material-icons {
 }
 
 .plusButton {
-    color: rgb(37, 109, 37);
-    border-radius: 6px 0px 0px 6px;
+    /* float: right; */
+}
+
+.button-icon.plus {
+    fill: rgba(106, 176, 76,1.0);
+    /* margin-top: 8px !important; */
+    /* margin-top: 12px;
+    margin-bottom: 0px; */
+    padding-top: 2px;
+}
+
+.button-icon.minus {
+    fill: rgba(235, 77, 75, 1.0);
+    /* margin-top: 8px !important; */
+    /* margin-top: 12px;
+    margin-bottom: 0px; */
+    padding-top: 2px;
 }
 
 .minusButton {
-    color: rgb(194, 50, 50);
-    border-radius: 6px 0px 0px 6px;
-}
+    /* float: left; */
 
-.plusButton:hover {
-    color: rgb(60, 173, 60);
-}
-
-.plusButton:active {
-    color: rgb(11, 68, 11);
-}
-
-.minusButton:hover {
-    color: rgb(230, 37, 37);
-}
-
-.minusButton:active {
-    color: rgb(90, 15, 15);
 }
 
 .modal {
@@ -282,10 +218,11 @@ i.material-icons {
     width: 560px;
     border-radius: 6px;
     height: 120px;
-    background: white;
+    background: rgba(223, 249, 251, 1.0);
     margin: 20% auto;
     padding: 20px;
     margin-bottom: 20px;
+    margin-top: 200px;
 }
 
 .modal-text {
@@ -303,10 +240,12 @@ i.material-icons {
     border-radius: 6px;
     padding-left: 4px;
     width: 550px;
+    background: rgba(223, 249, 251, 1.0);
 }
 
 .modal-input {
-    border-color: red;
+    border-color: rgba(255, 63, 52, 1.0);
+    ;
 }
 
 .good {
@@ -319,14 +258,14 @@ i.material-icons {
     margin: auto;
 }
 
-.modal-accept,
-.modal-cancel {
+.modal-accept, .modal-cancel {
+    transition: 0.25s background;
     border-radius: 6px;
     height: 60px;
     opacity: 1;
     font-weight: 400;
     font-size: 1.2em;
-    color: white;
+    color: rgba(223, 249, 251, 1.0);
     line-height: 3em;
     text-align: center;
     cursor: pointer;
@@ -336,12 +275,20 @@ i.material-icons {
 .modal-accept {
     opacity: 0;
     float: right;
-    background: rgb(108, 196, 91);
+    background: rgba(34, 166, 179, 1.0);
 }
 
 .modal-cancel {
     float: left;
-    background: rgb(196, 91, 91);
+    background: rgba(235, 77, 75, 1.0);
+}
+
+.modal-accept:hover {
+    background: rgba(126, 214, 223, 1.0);
+}
+
+.modal-cancel:hover {
+    background: rgba(255, 121, 121, 1.0);
 }
 
 @-ms-keyframes spin {

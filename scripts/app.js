@@ -103,14 +103,12 @@ function addPlayer(name) {
 
 // clearing all results from cStats and writing it to Cookie
 function clearResults() {
-    if (confirm("Вы действительно хотите очистить результаты?")) {
-        clearPlayerList();
-        cStats = {};
-        curRound = 1;
-        setCost(10);
-        setCookie('stats', JSON.stringify(cStats), 2);
-        updateRoundInfo();
-    }
+    clearPlayerList();
+    cStats = {};
+    curRound = 1;
+    setCost(10);
+    setCookie('stats', JSON.stringify(cStats), 2);
+    updateRoundInfo();
 }
 
 
@@ -192,7 +190,7 @@ function createInputModal(text) {
     modalCancel.text('Отмена');
     modalAccept.text('Добавить');
 
-    modalText.text(text);
+    modalText.text("'Введите имя игрока'");
     modalWindow.append([modalText, modalInput]);
     modalButtons.append([modalCancel, modalAccept]);
     modalBg.append([modalWindow, modalButtons]);
@@ -216,11 +214,11 @@ function createInputModal(text) {
 
     modalInput.on('keyup', function (e, timeline) {
         var input = $(e.target);
-        if (input.val().length >= 3 && !input.hasClass('good')) {
+        if (input.val().length > 0 && !input.hasClass('good')) {
             input.addClass('good');
             t0.play();
         }
-        else if (input.val().length < 3 && input.hasClass('good')) {
+        else if (input.val().length < 1 && input.hasClass('good')) {
             console.log('hide');
             input.removeClass('good');
             t0.reverse();
@@ -228,7 +226,7 @@ function createInputModal(text) {
 
     });
 
-    modalAccept.on('click', function(e) {
+    modalAccept.on('click', function (e) {
         console.log($('#modalInput').val());
         addPlayer($('#modalInput').val());
     })
@@ -241,36 +239,129 @@ function createInputModal(text) {
     });
     t1.to(".main", 0, {
         webkitFilter: "blur(2px)",
-    }).fromTo(".modal-bg", 0.25,
-            {
-                opacity: 0,
-                ease: Power0
-            },
-            {
-                opacity: 1,
-            }
-        ).fromTo(".modal-window", 0.25,
-            {
-                opacity: 0,
-                y: -70,
-                ease: Power0
-            },
-            {
-                opacity: 1,
-                y: 0
-            }
-        ).fromTo(".modal-cancel", 0.25,
-            {
-                opacity: 0,
-                x: -60,
-                width: 60,
-                ease: Power0
-            },
-            {
-                opacity: 1,
-                width: 120,
-                x: 0
-            });
+    }).fromTo(".modal-bg", 0.15,
+        {
+            opacity: 0,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+        }
+    ).fromTo(".modal-window", 0.15,
+        {
+            opacity: 0,
+            y: -70,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            y: 0
+        }
+    ).fromTo(".modal-cancel", 0.15,
+        {
+            opacity: 0,
+            x: -60,
+            width: 60,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            width: 120,
+            x: 0
+        });
+
+    const t2 = new TimelineLite({ paused: true });
+
+    t2.to(".modal-accept", 0.15, {
+        opacity: 0,
+        x: 60,
+        width: 60
+    })
+
+    t1.play();
+
+    modalCancel.on('click', function () {
+        if ($('#modalInput').hasClass('good')) {
+            t2.play();
+            t1.reverse();
+        }
+        else {
+            t1.reverse();
+        }
+    })
+}
+
+function createConfirmModal() {
+    var confirm = false;
+    var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
+    var modalBg = $('<div>').addClass('modal-bg');
+    var modalWindow = $('<div>').addClass('modal-window');
+    var modalButtons = $('<div>').addClass('modal-buttons');
+    var modalText = $('<div>').addClass('modal-text');
+    var modalAccept = $('<div>').addClass('modal-accept');
+    var modalCancel = $('<div>').addClass('modal-cancel');
+
+    modalCancel.text('Отмена');
+    modalAccept.text('Очистить');
+
+    modalText.text("Вы действительно хотите очистить таблицу результатов?");
+    modalWindow.append([modalText]);
+    modalButtons.append([modalCancel, modalAccept]);
+    modalBg.append([modalWindow, modalButtons]);
+    modalDiv.append(modalBg);
+    $('body').prepend(modalDiv);
+
+    const t1 = new TimelineLite({
+        paused: true,
+        onReverseComplete: function () {
+            $('#modal').remove();
+            if (confirm) clearResults();
+        }
+    });
+    t1.to(".main", 0, {
+        webkitFilter: "blur(2px)",
+    }).fromTo(".modal-bg", 0.15,
+        {
+            opacity: 0,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+        }
+    ).fromTo(".modal-window", 0.15,
+        {
+            opacity: 0,
+            y: -70,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            y: 0
+        }
+    ).fromTo(".modal-cancel", 0.15,
+        {
+            opacity: 0,
+            x: -60,
+            width: 60,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            width: 120,
+            x: 0
+        }
+    ).fromTo(".modal-accept", 0.15,
+        {
+            opacity: 0,
+            x: 60,
+            width: 60,
+            ease: Power0
+        },
+        {
+            opacity: 1,
+            width: 120,
+            x: 0
+        }, '-=0.15');
 
     const t2 = new TimelineLite({ paused: true });
 
@@ -283,33 +374,13 @@ function createInputModal(text) {
     t1.play();
 
     modalCancel.on('click', function () {
-        if ($('#modalInput').hasClass('good')) {
-            t2.play();
-            TweenLite.delayedCall(0.25, function () {
-                t1.reverse();
-            })
-        }
-        else {
-            t1.reverse();
-        }
-        // t1;
+        t1.reverse();
     })
-}
 
-function createConfirmModal() {
-    var modalDiv = $('<div>').addClass('modal');
-    var modalBg = $('<div>').addClass('modal-bg');
-    var modalWindow = $('<div>').addClass('modal-window');
-    var modalButtons = $('<div>').addClass('modal-buttons');
-    var modalText = $('<div>').addClass('modal-text');
-    var modalInput = $('<input>').addClass('modal-input');
-    var modalCancel = $('<div>').addClass('modal-cancel');
-    var modalAccept = $('<div>').addClass('modal-accept');
-
-    // modalButtons.append(modal)
-
-
-    // $('body').prepend()
+    modalAccept.on('click', function () {
+        confirm = true;
+        t1.reverse();
+    })
 }
 
 
@@ -346,7 +417,7 @@ window.onload = function () {
 
     // Animation
     const t1 = new TimelineLite({ paused: true });
-    t1.fromTo("#settingsBar .button:nth-child(1)", 0.1,
+    t1.staggerFromTo("#settingsBar .button", 0.15,
         {
             opacity: 0,
             x: -70,
@@ -355,36 +426,18 @@ window.onload = function () {
         {
             opacity: 1,
             x: 0
-        }
-    ).fromTo("#settingsBar .button:nth-child(2)", 0.1,
-        {
-            opacity: 0,
-            x: -70,
-            ease: Power0
-        },
-        {
-            opacity: 1,
-            x: 0
-        }
-    ).fromTo("#settingsBar .button:nth-child(3)", 0.1,
-        {
-            opacity: 0,
-            x: -70,
-            ease: Power0
-        },
-        {
-            opacity: 1,
-            x: 0
-        });
+        }, 0.1
+    ).to(".button-icon.nightmode", 0.2, {
+        rotation: "-=45",
+        ease: Linear.easeNone
+    }, '+=0.1');
 
     // linking functions to buttons
     $('#settingsButton').on('click', function () {
         showSettings(event, t1)
     });
-    $('#addPlayer').on('click', function(){
-        createInputModal('Введите имя игрока');
-    });
-    $('#clearResults').click(clearResults);
+    $('#addPlayer').click(createInputModal);
+    $('#clearResults').click(createConfirmModal);
     $('#nextQuestion').click(nextQuestion);
     $('.cost-selector').each(function (index, el) {
         $(el).click(function () {
