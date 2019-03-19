@@ -95,15 +95,12 @@ i.material-icons {
 }
 
 .button-icon:hover {
+    transform: scale(0.97);
     fill: rgba(128, 142, 155, 1.0);
 }
 
 .button-icon:active {
     fill: rgba(128, 142, 155, 1.0);
-}
-
-#nightMode {
-    display: none !important;
 }
 
 .button-icon.nightmode {
@@ -139,6 +136,11 @@ i.material-icons {
     margin-top: 4px;
 }
 
+#playerList {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .playerDiv {
     margin-top: 10px;
     height: 60px;
@@ -153,6 +155,7 @@ i.material-icons {
     display: table;
     width: 100%;
     vertical-align: middle;
+    /* margin-bottom: 20px; */
 }
 
 .playerDiv:nth-child(1) {
@@ -191,28 +194,65 @@ i.material-icons {
     font-size: 1.4em;
 }
 
-.plusButton {
-    /* float: right; */
-}
-
 .button-icon.plus {
     fill: rgba(106, 176, 76, 1.0);
-    /* margin-top: 8px !important; */
-    /* margin-top: 12px;
-    margin-bottom: 0px; */
     padding-top: 2px;
 }
 
 .button-icon.minus {
     fill: rgba(232, 65, 24,1.0);
-    /* margin-top: 8px !important; */
-    /* margin-top: 12px;
-    margin-bottom: 0px; */
     padding-top: 2px;
 }
 
-.minusButton {
-    /* float: left; */
+#scoresDiv {
+    width: 100%;
+    height: 60px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+.scores-list {
+    list-style: none;
+    margin-block-end: 0;
+    margin-block-start: 0;
+    padding-inline-start: 0;
+    display: table;
+    border-spacing: 20px 0px;
+    margin: auto;
+}
+
+.scores-list li {
+    transition: transform 0.25s ease;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border: 3px solid transparent;
+    font-size: 1.7em;
+    width: 60px;
+    height: 60px;
+    border-radius: 50px;
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+}
+
+.scores-list li:hover{
+    transform: scale(0.9);
+}
+
+.scores-list li:active{
+    transform: scale(0.8);
+}
+
+.scores-list.plus li {
+    border-color: rgba(106, 176, 76, 1.0);
+    color: rgba(106, 176, 76, 1.0);
+}
+
+.scores-list.minus li {
+    border-color: rgba(232, 65, 24,1.0);
+    color: rgba(232, 65, 24,1.0);
 }
 
 .modal {
@@ -244,6 +284,10 @@ i.material-icons {
     margin-top: 200px;
 }
 
+.modal-window.screenshot {
+    height: auto;
+}
+
 .modal-text {
     font-weight: 400;
     font-size: 1.4em;
@@ -264,10 +308,6 @@ i.material-icons {
 
 .modal-input {
     border-color: rgba(232, 65, 24,1.0);
-}
-
-.good {
-    /* border-color: rgba(194, 54, 22,1.0); */
 }
 
 .modal-buttons {
@@ -309,6 +349,14 @@ i.material-icons {
     background: rgba(194, 54, 22,1.0);
 }
 
+.modal-image canvas {
+    border: 3px solid rgba(0, 168, 255,1.0);
+    border-radius: 6px;
+    /* width: 400px; */
+}
+
+/* animation-block*/
+
 @-ms-keyframes spin {
     from {
         -ms-transform: rotate(0deg);
@@ -342,14 +390,5 @@ i.material-icons {
     }
     to {
         transform: rotate(180deg);
-    }
-}
-
-@keyframes appear {
-    from {
-        transform: translateY(-30px);
-    }
-    to {
-        transform: translateY(0px);
     }
 }

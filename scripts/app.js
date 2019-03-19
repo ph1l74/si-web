@@ -51,11 +51,87 @@ function createBlankTable() {
     t1.play();
 }
 
-function createScoresDiv() {
+function createScoresDiv(playerId, mode) {
+    console.log('!')
     var scoresDiv = $('<div>').prop({ id: 'scoresDiv' }).addClass('scores-div');
-    
-}
+    var scoresUl = $('<ul>').addClass('scores-list');
+    var scores10 = $('<li>').prop({ cost: '10' }).text(10);
+    var scores20 = $('<li>').prop({ cost: '20' }).text(20);
+    var scores30 = $('<li>').prop({ cost: '30' }).text(30);
+    var scores40 = $('<li>').prop({ cost: '40' }).text(40);
+    var scores50 = $('<li>').prop({ cost: '50' }).text(50);
 
+    (mode === 'plus') ? scoresUl.addClass('plus') : scoresUl.addClass('minus');
+
+    scoresUl.append([scores10, scores20, scores30, scores40, scores50]);
+    scoresDiv.append(scoresUl);
+
+
+    const flipAnimation = new TimelineLite({
+        paused: true, onComplete: function () {
+
+        }
+    });
+
+    const flipAnimationSecond = new TimelineLite({
+    });
+    flipAnimationSecond.fromTo("#scoresDiv", 0.5, {
+        x: -300,
+        opacity: 0
+    }, {
+            x: 0,
+            opacity: 1
+        }, 0.5)
+    flipAnimationSecond.play();
+
+
+
+    flipAnimation.to("#" + playerId, 0.25, {
+        x: 300,
+        opacity: 0,
+        display: 'none'
+    })
+
+
+
+    flipAnimation.play();
+    $('#' + playerId).before(scoresDiv);
+    flipAnimationSecond.play();
+
+
+
+
+    // if ($('#scoresDiv').length > 0) {
+    //     var animation = new TimelineLite({paused: true});
+    //     animation.fromTo("#scoresDiv", 0.15, {
+    //         height: 60,
+    //         y: 0,
+    //         opacity: 1
+    //     },{
+    //         height: 0,
+    //         y: -70,
+    //         opacity: 0
+    //     });
+    //     animation.play();
+    //     $('#scoresDiv').remove();
+    // }
+
+    // $('#'+playerId).after(scoresDiv);
+    // var animation = new TimelineLite({paused: true});        
+    // animation.fromTo("#scoresDiv", 0.15, {
+    //     height: 0,
+    //     y: -70,
+    //     opacity: 0
+    // },{
+    //     height: 60,
+    //     y: 0,
+    //     opacity: 1
+    // });
+
+    // console.log('scoresDiv', );
+    // animation.play();
+
+}
 
 // creating playerDiv with plus/minus button, player name and player scores
 function createPlayerRow(playerName, playerScores) {
@@ -70,8 +146,14 @@ function createPlayerRow(playerName, playerScores) {
 
     plusButton.append(plusIcon);
     minusButton.append(minusIcon);
-    minusButton.click(scoreMinus);
-    plusButton.click(scorePlus);
+    // minusButton.click(scoreMinus);
+    // plusButton.click(scorePlus);
+    minusButton.on('click', function () {
+        createScoresDiv(playerName, 'minus')
+    });
+    plusButton.on('click', function () {
+        createScoresDiv(playerName, 'plus')
+    });
     playerlist.append(playerDiv);
     playerDiv.append([playerNameDiv, playerScoresDiv, minusButton, plusButton]);
 
@@ -203,7 +285,7 @@ function nextQuestion() {
 }
 
 function showSettings(e, timeline) {
-    var settingsButton = $(e.target).parent();
+    var settingsButton = $(e.target);
     var gearIcon = $('.button-icon.settings').first();
 
     if (!settingsButton.hasClass('active')) {
@@ -280,7 +362,7 @@ function createInputModal(text) {
         var input = $(e.target);
 
         if (input.val().length > 0) {
-            if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && input.val().replace(/ /g,'').length > 0) {
+            if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && input.val().trim().length > 0) {
                 if (!input.hasClass('good')) {
                     input.addClass('good');
                     t0.play();
@@ -345,7 +427,7 @@ function createInputModal(text) {
 
 
     modalAccept.on('click', function (e) {
-        var playerName = $('#modalInput').val().replace(/ /g,'');
+        var playerName = $('#modalInput').val().trim();
         if (checkNames(playerName)) {
             addPlayer(playerName);
             animatedTextChange("Игрок добавлен", '.modal-text', 0.15);
@@ -517,6 +599,78 @@ function createConfirmModal() {
     })
 }
 
+function makeScreenshot() {
+    html2canvas($('#playerList')[0]).then(canvas => {
+        var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
+        var modalBg = $('<div>').addClass('modal-bg');
+        var modalWindow = $('<div>').addClass('modal-window screenshot');
+        var modalImage = $('<div>').addClass('modal-image');
+        var modalButtons = $('<div>').addClass('modal-buttons');
+        var modalText = $('<div>').addClass('modal-text');
+        var modalAccept = $('<div>').addClass('modal-accept');
+
+        modalAccept.text('Ок');
+
+        modalText.text("Скриншот результатов:");
+        modalImage.append(canvas);
+        modalWindow.append([modalText, modalImage]);
+        modalButtons.append(modalAccept);
+        modalBg.append([modalWindow, modalButtons]);
+        modalDiv.append(modalBg);
+        $('body').prepend(modalDiv);
+
+        const t1 = new TimelineLite({
+            paused: true,
+            onReverseComplete: function () {
+                $('#modal').remove();
+            }
+        });
+        t1.to(".main", 0, {
+            webkitFilter: "blur(2px)",
+        }).fromTo(".modal-bg", 0.15,
+            {
+                opacity: 0,
+                ease: Power0
+            },
+            {
+                opacity: 1,
+            }
+        ).fromTo(".modal-window", 0.15,
+            {
+                opacity: 0,
+                y: -70,
+                ease: Power0
+            },
+            {
+                opacity: 1,
+                y: 0
+            }
+        ).fromTo(".modal-accept", 0.15,
+            {
+                opacity: 0,
+                x: 60,
+                width: 60,
+                ease: Power0
+            },
+            {
+                opacity: 1,
+                width: 120,
+                x: 0
+            }, '-=0.15');
+
+        var $canvas = $(".modal-image canvas").first();
+        $canvas.css('height', "auto");
+        $canvas.width(554);
+        // $canvas.height($parent.height());
+
+        t1.play();
+
+        modalAccept.on('click', function () {
+            t1.reverse();
+        })
+    });
+}
+
 window.onload = function () {
     // Getting last session info
     cStats = getCookie('stats');
@@ -559,7 +713,6 @@ window.onload = function () {
         {
             opacity: 0,
             x: -70,
-            ease: Linear.easeNone
         },
         {
             opacity: 1,
@@ -567,7 +720,6 @@ window.onload = function () {
         }, 0.1
     ).to(".button-icon.nightmode", 0.15, {
         rotation: "-=45",
-        ease: Linear.easeNone
     }, '+=0.1');
 
     // linking functions to buttons
@@ -576,6 +728,7 @@ window.onload = function () {
     });
     $('#addPlayer').click(createInputModal);
     $('#clearResults').click(createConfirmModal);
+    $('#screenShot').click(makeScreenshot);
     $('#nextQuestion').click(nextQuestion);
     $('.cost-selector').each(function (index, el) {
         $(el).click(function () {
