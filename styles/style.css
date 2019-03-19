@@ -95,7 +95,6 @@ i.material-icons {
 }
 
 .button-icon:hover {
-    transform: scale(0.97);
     fill: rgba(128, 142, 155, 1.0);
 }
 
@@ -185,13 +184,23 @@ i.material-icons {
 }
 
 .minusButton, .plusButton {
-    transition: all 0.5s;
+    transition: all 0.25s ease;
     width: 60px;
     height: 60px;
     text-align: center;
     font-weight: 200;
     cursor: pointer;
     font-size: 1.4em;
+}
+
+.minusButton:hover,
+.plusButton:hover {
+    transform: scale(0.9);
+}
+
+.minusButton:active,
+.plusButton:active {
+    transform: scale(0.8);
 }
 
 .button-icon.plus {
@@ -204,11 +213,12 @@ i.material-icons {
     padding-top: 2px;
 }
 
-#scoresDiv {
+.scores-div {
+    display: none;
     width: 100%;
-    height: 60px;
+    height: 100%;
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 6px;
 }
 
@@ -227,10 +237,11 @@ i.material-icons {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-    border: 3px solid transparent;
-    font-size: 1.7em;
-    width: 60px;
-    height: 60px;
+    border: 4px solid transparent;
+    font-size: 1em;
+    font-weight: 800;
+    width: 30px;
+    height: 30px;
     border-radius: 50px;
     text-align: center;
     margin: auto;
