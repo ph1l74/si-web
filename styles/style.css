@@ -342,6 +342,7 @@ i.material-icons {
 }
 
 .modal-accept {
+    display: none;
     opacity: 0;
     float: right;
     background: rgba(0, 168, 255,1.0);

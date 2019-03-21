@@ -39,7 +39,7 @@ function createBlankTable() {
 
     const animation = new TimelineLite({ paused: true });
 
-    animation.staggerFromTo(".blankTable *", 0.5, {
+    animation.staggerFromTo(".blankTable *", 0.15, {
         opacity: 0,
         y: -10
     }, {
@@ -78,14 +78,14 @@ function createScoresDiv(playerId, mode) {
             $.each(scoresCosts, function (index, el) {
                 el.on('click', function () {
                     (mode === 'plus') ? scorePlus(playerId, el.data('cost')) : scoreMinus(playerId, el.data('cost'));
-                    $('#' + scoresDivId).fadeOut(150);        
+                    $('#' + scoresDivId).fadeOut(150);
                     animation.reverse();
-                    $('#' + scoresDivId).remove();        
+                    $('#' + scoresDivId).remove();
                 });
             });
             $('#' + playerId).append(scoresDiv);
             $('#' + scoresDivId).fadeIn(150);
-        
+
         }
     });
 
@@ -101,9 +101,9 @@ function createScoresDiv(playerId, mode) {
 
 
 // creating playerDiv with plus/minus button, player name and player scores
-function createPlayerRow(playerName, playerScores) {
+function createPlayerRow(playerId, playerName, playerScores) {
     var playerlist = $('#playerList');
-    var playerDiv = $('<div>').prop({ id: playerName }).addClass('playerDiv');
+    var playerDiv = $('<div>').prop({ id: playerId }).addClass('playerDiv');
     var minusButton = $('<div>').addClass('minusButton');
     var minusIcon = $('<div class="button-icon minus"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div>');
     var playerNameDiv = $('<div>').addClass('playerName').text(playerName);
@@ -116,17 +116,17 @@ function createPlayerRow(playerName, playerScores) {
     // minusButton.click(scoreMinus);
     // plusButton.click(scorePlus);
     minusButton.on('click', function () {
-        createScoresDiv(playerName, 'minus')
+        createScoresDiv(playerId, 'minus')
     });
     plusButton.on('click', function () {
-        createScoresDiv(playerName, 'plus')
+        createScoresDiv(playerId, 'plus')
     });
     playerlist.append(playerDiv);
     playerDiv.append([playerNameDiv, playerScoresDiv, minusButton, plusButton]);
 
-    function animateCreation(playerId) {
+    function animateCreation(playerIdSelector) {
         const animation = new TimelineLite({ paused: true });
-        var id = '#' + playerId;
+        var id = '#' + playerIdSelector;
         console.log(id)
         animation.fromTo(
             id,
@@ -142,7 +142,7 @@ function createPlayerRow(playerName, playerScores) {
         animation.play();
     }
 
-    animateCreation(playerName)
+    animateCreation(playerId);
 
 }
 
@@ -156,9 +156,9 @@ function clearPlayerList() {
 
 
 // check if name already in game
-function checkNames(playerName) {
+function checkNames(playerId) {
     for (var player in cStats) {
-        if (player == playerName) {
+        if (player == playerId) {
             return false;
         }
     }
@@ -167,18 +167,16 @@ function checkNames(playerName) {
 
 
 // adding Player to cStats-object and creating playerDiv
-function addPlayer(name) {
-    // var playerName = $('#modal-input').val();
-    var playerName = name;
+function addPlayer(playerId, playerName) {
     var playerScores = 0
-    if (playerName) {
+    if (playerId && playerName) {
         playerObj = {};
-        playerObj[playerName] = { scores: playerScores };
+        playerObj[playerId] = { name: playerName, scores: playerScores };
         if (JSON.stringify(cStats) == '{}') {
             $('#playerList').empty();
         }
         $.extend(cStats, playerObj);
-        createPlayerRow(playerName, playerScores);
+        createPlayerRow(playerId, playerName, playerScores);
         setCookie('stats', JSON.stringify(cStats), 2);
     }
 }
@@ -202,7 +200,7 @@ function clearResults() {
         },
         {
             opacity: 0,
-            x: -300
+            x: -100
         }, -0.1
     );
     t1.play();
@@ -246,7 +244,7 @@ function showSettings(e, timeline) {
 }
 
 // Create Modal with Input to input new player name
-function createInputModal(text) {
+function createInputModal() {
     var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
     var modalBg = $('<div>').addClass('modal-bg');
     var modalWindow = $('<div>').addClass('modal-window');
@@ -266,13 +264,15 @@ function createInputModal(text) {
     modalDiv.append(modalBg);
     $('body').prepend(modalDiv);
 
-    const t0 = new TimelineLite({ paused: true });
-    t0.fromTo(".modal-accept", 0.15,
+    $('#modalInput').trigger('focus');
+
+    const showAcceptAnimation = new TimelineLite({ paused: true });
+    showAcceptAnimation.fromTo('.modal-accept', 0.1, { display: 'none' }, { display: 'block' }).fromTo(".modal-accept", 0.15,
         {
             opacity: 0,
             x: 60,
             width: 60,
-            ease: Power0
+            // ease: Power0
         },
         {
             opacity: 1,
@@ -280,6 +280,21 @@ function createInputModal(text) {
             width: 120
             // ease: Power0
         });
+
+    const hideAcceptAnimation = new TimelineLite({ paused: true });
+    hideAcceptAnimation.fromTo(".modal-accept", 0.15,
+        {
+            opacity: 1,
+            x: 0,
+            width: 120
+            // ease: Power0
+        },
+        {
+            opacity: 0,
+            x: 60,
+            width: 60
+            // ease: Power0
+        }).fromTo('.modal-accept', 0.1, { display: 'block' }, { display: 'none' }, 0.15);
 
     const animateGoodBorder = new TimelineLite({ paused: true });
     animateGoodBorder.to('.modal-input', 0.15, {
@@ -291,13 +306,13 @@ function createInputModal(text) {
         borderColor: 'rgba(0, 168, 255, 1.0)'
     });
 
-    modalInput.on('keyup', function (e, timeline) {
+    $('#modalInput').on('keyup', function (e, timeline) {
         var input = $(e.target);
         if (input.val().length > 0) {
             if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && input.val().trim().length > 0) {
                 if (!input.hasClass('good')) {
                     input.addClass('good');
-                    t0.play();
+                    showAcceptAnimation.play();
                 }
                 animateGoodBorder.play();
             }
@@ -305,7 +320,7 @@ function createInputModal(text) {
                 if (input.hasClass('good')) {
                     input.removeClass('good');
                 }
-                t0.reverse();
+                showAcceptAnimation.reverse();
                 animateGoodBorder.reverse();
             }
         }
@@ -313,7 +328,7 @@ function createInputModal(text) {
             if (input.hasClass('good')) {
                 input.removeClass('good');
             }
-            t0.reverse();
+            showAcceptAnimation.reverse();
             animateGoodBorder.reverse();
         }
 
@@ -333,19 +348,21 @@ function createInputModal(text) {
         animation.play();
     }
 
-
-    modalAccept.on('click', function (e) {
+    function acceptCreatePlayer() {
         var playerName = $('#modalInput').val().trim();
-        if (checkNames(playerName)) {
-            addPlayer(playerName);
+        var playerId = playerName.replace(/ /g, "_");
+
+        if (checkNames(playerId)) {
+            addPlayer(playerId, playerName);
             animatedTextChange("Игрок добавлен", '.modal-text', 0.15);
             animateAcceptedBorder.play();
+            $('#modalInput').val('');
+            hideAcceptAnimation.play();
             setTimeout(function () {
                 animatedTextChange("Введите имя нового игрока", '.modal-text', 0.15);
                 animateAcceptedBorder.reverse();
                 animateGoodBorder.reverse();
             }, 1000);
-            $('#modalInput').val('');
         }
         else {
             animatedTextChange("Такое имя игрока уже существует", '.modal-text', 0.15);
@@ -355,15 +372,18 @@ function createInputModal(text) {
                 animateGoodBorder.play();
             }, 1500);
         }
-    })
+    }
 
-    const t1 = new TimelineLite({
+    $('.modal-accept').first().click(acceptCreatePlayer);
+
+    const globalShowAnimation = new TimelineLite({
         paused: true,
         onReverseComplete: function () {
             $('#modal').remove();
         }
     });
-    t1.to(".main", 0, {
+
+    globalShowAnimation.to(".main", 0, {
         webkitFilter: "blur(2px)",
     }).fromTo(".modal-bg", 0.15,
         {
@@ -396,25 +416,43 @@ function createInputModal(text) {
             x: 0
         });
 
-    const t2 = new TimelineLite({ paused: true });
+    // const hideModalAcceptAnimation = new TimelineLite({ paused: true });
 
-    t2.to(".modal-accept", 0.15, {
-        opacity: 0,
-        x: 60,
-        width: 60
-    })
+    // t2.to(".modal-accept", 0.15, {
+    //     opacity: 0,
+    //     x: 60,
+    //     width: 60
+    // })
 
-    t1.play();
+    globalShowAnimation.play();
+    // showAcceptAnimation.play();
 
-    modalCancel.on('click', function () {
+    function cancelCreatePlayer() {
         if ($('#modalInput').hasClass('good')) {
-            t2.play();
-            t1.reverse();
+            hideAcceptAnimation.play();
+            globalShowAnimation.reverse();
         }
         else {
-            t1.reverse();
+            globalShowAnimation.reverse();
         }
-    })
+    }
+
+    modalCancel.click(cancelCreatePlayer);
+
+    $('#modalInput').on('keydown', function (e) {
+        if (e.ctrlKey && e.keyCode == 13) {
+            acceptCreatePlayer();
+        }
+        else if (e.key === "Escape") {
+            cancelCreatePlayer();
+        }
+    });
+
+    $('#modal').on('keyup', function (e) {
+        if (e.key === "Escape") {
+            cancelCreatePlayer();
+        }
+    });
 }
 
 function createConfirmModal() {
@@ -437,14 +475,14 @@ function createConfirmModal() {
     modalDiv.append(modalBg);
     $('body').prepend(modalDiv);
 
-    const t1 = new TimelineLite({
+    const appearAnimation = new TimelineLite({
         paused: true,
         onReverseComplete: function () {
             $('#modal').remove();
             if (confirm) clearResults();
         }
     });
-    t1.to(".main", 0, {
+    appearAnimation.to(".main", 0, {
         webkitFilter: "blur(2px)",
     }).fromTo(".modal-bg", 0.15,
         {
@@ -484,28 +522,21 @@ function createConfirmModal() {
             ease: Power0
         },
         {
+            display: 'block',
             opacity: 1,
             width: 120,
             x: 0
         }, '-=0.15');
 
-    const t2 = new TimelineLite({ paused: true });
-
-    t2.to(".modal-accept", 0.25, {
-        opacity: 0,
-        x: 60,
-        width: 60
-    })
-
-    t1.play();
+    appearAnimation.play();
 
     modalCancel.on('click', function () {
-        t1.reverse();
+        appearAnimation.reverse();
     })
 
     modalAccept.on('click', function () {
         confirm = true;
-        t1.reverse();
+        appearAnimation.reverse();
     })
 }
 
@@ -520,8 +551,8 @@ function makeScreenshot() {
         var modalAccept = $('<div>').addClass('modal-accept');
 
         modalAccept.text('Ок');
-
         modalText.text("Скриншот результатов:");
+
         modalImage.append(canvas);
         modalWindow.append([modalText, modalImage]);
         modalButtons.append(modalAccept);
@@ -529,13 +560,14 @@ function makeScreenshot() {
         modalDiv.append(modalBg);
         $('body').prepend(modalDiv);
 
-        const t1 = new TimelineLite({
+        const showModal = new TimelineLite({
             paused: true,
             onReverseComplete: function () {
                 $('#modal').remove();
             }
         });
-        t1.to(".main", 0, {
+
+        showModal.to(".main", 0, {
             webkitFilter: "blur(2px)",
         }).fromTo(".modal-bg", 0.15,
             {
@@ -557,12 +589,14 @@ function makeScreenshot() {
             }
         ).fromTo(".modal-accept", 0.15,
             {
+                display: 'none',
                 opacity: 0,
                 x: 60,
                 width: 60,
                 ease: Power0
             },
             {
+                display: 'block',
                 opacity: 1,
                 width: 120,
                 x: 0
@@ -573,11 +607,15 @@ function makeScreenshot() {
         $canvas.width(554);
         // $canvas.height($parent.height());
 
-        t1.play();
+        $('#modal').on('keyup', function (e) {
+            if (e.key === "Escape") {
+                showModal.reverse();
+            }
+        });
 
-        modalAccept.on('click', function () {
-            t1.reverse();
-        })
+        showModal.play();
+
+        modalAccept.on('click', function () { showModal.reverse(); });
     });
 }
 
@@ -594,19 +632,20 @@ window.onload = function () {
     // Else render table with last stats
     else {
         cStats = JSON.parse(cStats);
-        for (var player in cStats) {
-            createPlayerRow(player, cStats[player].scores);
+        for (var playerId in cStats) {
+            createPlayerRow(playerId, cStats[playerId].name, cStats[playerId].scores);
         }
     }
 
     // Animation
-    const t1 = new TimelineLite({
+    const showSettingsAnimation = new TimelineLite({
         paused: true,
         onReverseComplete: function () {
             $('#settingsBar').hide();
         }
     });
-    t1.staggerFromTo("#settingsBar .button", 0.15,
+
+    showSettingsAnimation.staggerFromTo("#settingsBar .button", 0.15,
         {
             opacity: 0,
             x: -70,
@@ -615,15 +654,18 @@ window.onload = function () {
             opacity: 1,
             x: 0
         }, 0.1
-    ).to(".button-icon.nightmode", 0.15, {
+    ).to(".button-icon.nightmode", 0.25, {
         rotation: "-=45",
-    }, '+=0.1');
+    }, 0.75);
 
     // linking functions to buttons
     $('#settingsButton').on('click', function () {
-        showSettings(event, t1)
+        showSettings(event, showSettingsAnimation)
     });
     $('#addPlayer').click(createInputModal);
     $('#clearResults').click(createConfirmModal);
     $('#screenShot').click(makeScreenshot);
+    $('#nightMode').on('click', function () {
+        console.log('cStats', cStats);
+    })
 }
