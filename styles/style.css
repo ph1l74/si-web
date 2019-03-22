@@ -67,7 +67,8 @@ body {
 }
 
 #settingsBar {
-    display: none;
+    /* display: none; */
+    /* opacity: 0; */
 }
 
 #settingsBar .button {
@@ -308,7 +309,7 @@ i.material-icons {
 .modal-input {
     transition: 0.5s all;
     outline: none;
-    border: 2px solid rgba(0, 0, 0, 0.12);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     height: 60px;
     font-size: 1.2em;
     border-radius: 6px;
@@ -318,7 +319,7 @@ i.material-icons {
 }
 
 .modal-input {
-    border-color: rgba(232, 65, 24,1.0);
+    /* border-color: rgba(232, 65, 24,1.0); */
 }
 
 .modal-buttons {
@@ -342,6 +343,7 @@ i.material-icons {
 }
 
 .modal-accept {
+    /* border: 20px solid red; */
     display: none;
     opacity: 0;
     float: right;
