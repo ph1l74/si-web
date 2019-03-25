@@ -1,6 +1,7 @@
 var cStats = {};
 var curCost = 10;
 var settingsActive = false;
+var nightMode = true;
 
 
 // getting Cookie by parameter name
@@ -19,13 +20,13 @@ function getCookie(cname) {
     }
 }
 
+
 // setting Cookie 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ';' + expires + ';path=/;'
-    // console.log("set", cname, cvalue);
 }
 
 
@@ -128,7 +129,6 @@ function createPlayerRow(playerId, playerName, playerScores) {
     function animateCreation(playerIdSelector) {
         const animation = new TimelineLite({ paused: true });
         var id = '#' + playerIdSelector;
-        console.log(id)
         animation.fromTo(
             id,
             0.5,
@@ -201,7 +201,7 @@ function clearResults() {
         {
             opacity: 0,
             scale: 0,
-        }, -0.5
+        }, -0.05
     );
     disappearAnimation.play();
 }
@@ -242,7 +242,7 @@ function showSettings() {
         var gearIcon = $('.button-icon.settings').first();
 
         // Animation on show
-        const showSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () {settingsActive = false;}});
+        const showSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; } });
 
         showSettingsAnimation.to("#settingsBar .button", 0.1, {
             display: 'inline-block'
@@ -260,7 +260,7 @@ function showSettings() {
         }, { rotation: 145, }, 1.25);
 
         // Animation on hide
-        const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () {settingsActive = false;}});
+        const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; } });
 
         hideSettingsAnimation.to(".button-icon.nightmode", 0.5, {
             rotation: '-=360',
@@ -294,9 +294,6 @@ function showSettings() {
 
 // Create Modal with Input to input new player name
 function createInputModal() {
-
-    var textChangeinAction = false;
-
     var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
     var modalBg = $('<div>').addClass('modal-bg');
     var modalWindow = $('<div>').addClass('modal-window');
@@ -318,21 +315,72 @@ function createInputModal() {
 
     $('#modalInput').trigger('focus');
 
-    const showAcceptAnimation = new TimelineLite({ paused: true });
-    showAcceptAnimation.fromTo('.modal-accept', 0.05, { display: 'none' }, { display: 'block' }).fromTo(".modal-accept", 0.15,
+    // All modal window elements animation
+    const globalShowAnimation = new TimelineLite({
+        paused: true,
+        onComplete: function() {
+            console.log('show start')
+        },
+        onReverseComplete: function () {
+            cancelCreateisActive = false;
+            console.log('close start')
+            $('#modal').remove();
+        }
+    });
+
+    globalShowAnimation
+        .fromTo(".main", 0, 
+            { webkitFilter: 'blur(0px)' },
+            { webkitFilter: 'blur(2px)' })
+        .fromTo(".modal-bg", 0.15,
         {
             opacity: 0,
-            x: 60,
+            // ease: Power0
+        },
+        {
+            opacity: 1,
+        }
+    ).fromTo(".modal-window", 0.15,
+        {
+            opacity: 0,
+            y: -70,
+            // ease: Power0
+        },
+        {
+            opacity: 1,
+            y: 0
+        }
+    ).fromTo(".modal-cancel", 0.15,
+        {
+            opacity: 0,
+            x: -60,
             width: 60,
             // ease: Power0
         },
         {
             opacity: 1,
-            x: 0,
-            width: 120
-            // ease: Power0
+            width: 120,
+            x: 0
         });
 
+
+
+    // Accept Button Appear Animation
+    const showAcceptAnimation = new TimelineLite({ paused: true });
+    showAcceptAnimation.fromTo('.modal-accept', 0.1, { display: 'none' }, { display: 'block' })
+        .fromTo(".modal-accept", 0.15,
+            {
+                opacity: 0,
+                x: 60,
+                width: 60
+            },
+            {
+                opacity: 1,
+                x: 0,
+                width: 120
+            });
+
+    // Accept Button Disappear Animation
     const hideAcceptAnimation = new TimelineLite({ paused: true });
     hideAcceptAnimation.fromTo(".modal-accept", 0.15,
         {
@@ -349,38 +397,15 @@ function createInputModal() {
         }).fromTo('.modal-accept', 0.1, { display: 'block' }, { display: 'none' }, 0.25);
 
 
+    // Border decoration animation
+    var animateBorderinAction = false;
     function animateBorder(mode, duration) {
-        switch (mode) {
-            case 'init':
-                color = 'rgba(0, 0, 0, 0.12)';
-                break;
-            case 'good':
-                color = 'rgba(68, 189, 50, 1.0)';
-                break;
-            case 'info':
-                color = 'rgba(0, 168, 255, 1.0)';
-                break;
-            case 'bad':
-                color = 'rgba(232, 65, 24,1.0)';
-                break;
-        }
-
-        const animation = new TimelineLite({ paused: true });
-        animation.to('.modal-input', duration, {
-            borderColor: color
-        });    
-        animation.play();
-    }
-    
-    function animatedTextChange(text, classname, delay, mode, textDelay) {
-        console.log("textChangeinAction", textChangeinAction);
-
-        if (!textChangeinAction) {
-            textChangeinAction = true;
-            var textBefore = 'Введите имя нового игрока';
-            var color = 'rgba(0, 168, 255, 1.0)'
-
+        if (!animateBorderinAction) {
+            animateBorderinAction = true;
             switch (mode) {
+                case 'init':
+                    color = 'rgba(0, 0, 0, 0.12)';
+                    break;
                 case 'good':
                     color = 'rgba(68, 189, 50, 1.0)';
                     break;
@@ -392,15 +417,20 @@ function createInputModal() {
                     break;
             }
 
-            const animateBorder = new TimelineLite({ paused: true
-                /*,onComplete: function() {
-                    setTimeout(function () { 
-                        animateBorder.reverse()
-                    }, textDelay);
-                }*/});
-            animateBorder.to('.modal-input', 0.3, {
+            const animation = new TimelineLite({ paused: true, onComplete: function () { animateBorderinAction = false; } });
+            animation.to('.modal-input', duration, {
                 borderColor: color
             });
+            animation.play();
+        }
+    }
+
+    // Text change animation
+    var textChangeinAction = false;
+    function animatedTextChange(text, classname, delay, mode, textDelay) {
+        if (!textChangeinAction) {
+            textChangeinAction = true;
+            var textBefore = 'Введите имя нового игрока';
 
             const animationText = new TimelineLite({
                 paused: true,
@@ -408,7 +438,7 @@ function createInputModal() {
                     $(classname).first().text(text);
                     animationText.reverse();
                 },
-                onReverseComplete: function() {
+                onReverseComplete: function () {
                     textChangeinAction = false;
                 }
             });
@@ -416,8 +446,8 @@ function createInputModal() {
                 opacity: 0
             })
 
+            animateBorder(mode, 0.3);
             animationText.play();
-            animateBorder.play();
 
             setTimeout(function () {
                 animationText.vars.onComplete = function () {
@@ -425,111 +455,46 @@ function createInputModal() {
                     animationText.reverse();
                 }
                 animationText.play();
+                animateBorder('init', 0.3);
             }, textDelay);
         }
     }
 
 
-    const globalShowAnimation = new TimelineLite({
-        paused: true,
-        onReverseComplete: function () {
-            $('#modal').remove();
-        }
-    });
-
-    globalShowAnimation.to(".main", 0, {
-        webkitFilter: "blur(2px)",
-    }).fromTo(".modal-bg", 0.15,
-        {
-            opacity: 0,
-            ease: Power0
-        },
-        {
-            opacity: 1,
-        }
-    ).fromTo(".modal-window", 0.15,
-        {
-            opacity: 0,
-            y: -70,
-            ease: Power0
-        },
-        {
-            opacity: 1,
-            y: 0
-        }
-    ).fromTo(".modal-cancel", 0.15,
-        {
-            opacity: 0,
-            x: -60,
-            width: 60,
-            ease: Power0
-        },
-        {
-            opacity: 1,
-            width: 120,
-            x: 0
-        });
-
-    // const hideModalAcceptAnimation = new TimelineLite({ paused: true });
-
-    // t2.to(".modal-accept", 0.15, {
-    //     opacity: 0,
-    //     x: 60,
-    //     width: 60
-    // })
-
+    // hideAcceptAnimation.play();
     globalShowAnimation.play();
-    // showAcceptAnimation.play();
 
     function acceptCreatePlayer(playerName) {
         var delay = 0.15
         var playerId = playerName.replace(/ /g, "_");
         if (playerName.length > 0) {
             if (playerName.search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) >= 0) {
-                // console.log('huita')
-                animatedTextChange("Используются запрещенные символы", '.modal-text', delay, 'good', 1500);
-                // animateGoodBorder.reverse();
-                // setTimeout(function () {
-                //     animatedTextChange("Введите имя нового игрока", '.modal-text', delay);
-                //     animateGoodBorder.play();
-                // }, 1500);
+                animatedTextChange("Используются запрещенные символы", '.modal-text', delay, 'bad', 1500);
             }
             else {
                 if (checkNames(playerId)) {
                     addPlayer(playerId, playerName);
                     animatedTextChange("Игрок добавлен", '.modal-text', delay, 'info', 1500);
-                    // animateAcceptedBorder.play();
                     $('#modalInput').val('');
-                    // hideAcceptAnimation.play();
-                    // setTimeout(function () {
-                    //     animatedTextChange("Введите имя нового игрока", '.modal-text', delay);
-                    //     animateAcceptedBorder.reverse();
-                    //     animateGoodBorder.reverse();
-                    // }, 1500);
+                    hideAcceptAnimation.play();
                 }
                 else {
                     animatedTextChange("Такое имя игрока уже существует", '.modal-text', delay, 'bad', 1500);
-                    // animateGoodBorder.reverse();
-                    // setTimeout(function () {
-                    //     animatedTextChange("Введите имя нового игрока", '.modal-text', delay);
-                    //     animateGoodBorder.play();
-                    // }, 1500);
                 }
             }
         }
     }
 
+    var cancelCreateisActive = false;
     function cancelCreatePlayer() {
-        if ($('#modalInput').hasClass('good')) {
+        if (!cancelCreateisActive) {
+            cancelCreateisActive = true;
             hideAcceptAnimation.play();
-            globalShowAnimation.reverse();
-        }
-        else {
-            globalShowAnimation.reverse();
+            globalShowAnimation.reverse(0);
         }
     }
 
-    $('#modalInput').on('keyup', function (e, timeline) {
+    $('#modalInput').on('keyup', function (e) {
         var input = $(e.target);
         if (input.val().length > 0) {
             if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && input.val().trim().length > 0) {
@@ -537,22 +502,23 @@ function createInputModal() {
                     input.addClass('good');
                     showAcceptAnimation.play();
                 }
-                animateGoodBorder.play();
+                animateBorder('good', 0.15);
             }
             else {
                 if (input.hasClass('good')) {
                     input.removeClass('good');
                 }
-                showAcceptAnimation.reverse();
-                animateGoodBorder.reverse();
+                hideAcceptAnimation.play();
+                animateBorder('bad', 0.15);
             }
         }
         else {
             if (input.hasClass('good')) {
                 input.removeClass('good');
             }
-            showAcceptAnimation.reverse();
-            animateGoodBorder.reverse();
+            hideAcceptAnimation.play();
+            // showAcceptAnimation.reverse(0);
+            animateBorder('bad', 0.15);
         }
 
     });
@@ -563,19 +529,22 @@ function createInputModal() {
     });
     modalCancel.click(cancelCreatePlayer);
 
-    $('#modalInput').on('keydown', function (e) {
+    $('#modalInput').on('keyup', function (e) {
         if (e.ctrlKey && e.keyCode == 13) {
             var input = $('#modalInput').val().trim()
             acceptCreatePlayer(input);
         }
         else if (e.key === "Escape") {
             cancelCreatePlayer();
+            // hideAcceptAnimation.play();
         }
     });
 
-    $('#modal').on('keyup', function (e) {
-        if (e.key === "Escape") {
+    $('body').first().on('keyup', function (e) {
+        // if ()
+        if (e.key === "Escape" && $('#modalInput').length > 0) {
             cancelCreatePlayer();
+            // hideAcceptAnimation.play();
         }
     });
 }
@@ -642,6 +611,7 @@ function createConfirmModal() {
         }
     ).fromTo(".modal-accept", 0.15,
         {
+            display: 'none',
             opacity: 0,
             x: 60,
             width: 60,
@@ -663,7 +633,6 @@ function createConfirmModal() {
     })
 
     $('#modal').on('keyup', function (e) {
-        console.log(e);
         if (e.key === 'Escape') {
             appearAnimation.reverse();
         }
@@ -754,6 +723,33 @@ function makeScreenshot() {
     });
 }
 
+function toggleNighMode() {
+    const animation = new TimelineLite({
+        paused: true,
+        onComplete: function () {
+            nightMode = false;
+        },
+        onReverseComplete: function () {
+            nightMode = true;
+        }
+    })
+
+    animation.fromTo('body', 0.5, {
+        backgroundColor: 'rgba(53, 59, 72,1.0)',
+
+    }, {
+            backgroundColor: 'rgba(223, 249, 251, 1.0)',
+        }).fromTo;
+
+    if (nightMode) {
+        animation.play();
+    }
+    else {
+        animation.reverse();
+    }
+
+}
+
 window.onload = function () {
     // Getting last session info
     cStats = getCookie('stats');
@@ -777,24 +773,20 @@ window.onload = function () {
     $('#addPlayer').click(createInputModal);
     $('#clearResults').click(createConfirmModal);
     $('#screenShot').click(makeScreenshot);
-    $('#nightMode').on('click', function () {
-        console.log('cStats', cStats);
-    })
+    $('#nightMode').click(toggleNighMode);
 
 
     // adding keyboard control
     $('body').on('keyup', function (e) {
-        console.log(e.which)
         switch (e.which) {
             case 79:
                 if ($('#modal').length == 0)
-                showSettings();
+                    showSettings();
                 break
             case 80:
                 if ($("#settingsButton").hasClass('active') && $('#modal').length == 0) {
                     createInputModal();
                 }
         }
-
     })
 }
