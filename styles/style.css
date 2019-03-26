@@ -12,12 +12,12 @@ body {
     /* font-family: 'Open Sans', sans-serif; */
 
     /* background: rgba(223, 249, 251, 1.0);; */
-    background: #232526;
-    background: -webkit-linear-gradient(195deg, rgba(53, 59, 72,1.0), rgba(47, 54, 64,1.0));
-    background: linear-gradient(195deg, rgba(53, 59, 72,1.0), rgba(47, 54, 64,1.0));
-    color: rgba(30, 39, 46, 1.0);
+    background: rgba(35, 37, 38, 1.0);
+    /* background: -webkit-linear-gradient(195deg, rgba(53, 59, 72,1.0), rgba(47, 54, 64,1.0)); */
+    /* background: linear-gradient(195deg, rgba(53, 59, 72,1.0), rgba(47, 54, 64,1.0)); */
+    /* color: rgba(30, 39, 46, 1.0); */
+    color: rgba(223, 249, 251, 1.0);
 }
-
 
 .header {
     text-transform: uppercase;
@@ -49,7 +49,7 @@ body {
 /* Buttons block */
 
 .button {
-    border: 3px solid rgba(245, 246, 250, .2);
+    border: 3px solid rgba(223, 249, 251, .2);
     transition: all 0.25s;
     padding: 6px;
     width: 50px;
@@ -57,13 +57,12 @@ body {
     border-radius: 4px;
     text-align: center;
     font-size: 2em;
-    /* color: grey; */
     margin-right: 10px;
     cursor: pointer;
 }
 
 .button:hover {
-    background: rgba(245, 246, 250, .2);
+    background: rgba(223, 249, 251, .2);
 }
 
 .button-icon.nightmode {
@@ -88,14 +87,14 @@ body {
 }
 
 .button:hover {
-    color: rgb(201, 201, 201);
+    color: rgba(223, 249, 251, 1.0);
 }
 
 .button-icon {
     transition: 0.5s fill;
     margin: 6px auto;
-    fill: rgba(72, 84, 96, 1.0);
-    color: rgba(72, 84, 96, 1.0);
+    fill: rgba(223, 249, 251, .2);
+    color: rgba(223, 249, 251, .2);
 }
 
 .button-icon:hover {
@@ -131,7 +130,7 @@ body {
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
-    color: rgba(245, 246, 250, 1.0);
+    /* color: rgba(245, 246, 250, 1.0); */
     border: 3px solid rgba(245, 246, 250, .2);
     border-radius: 4px;
     display: table;

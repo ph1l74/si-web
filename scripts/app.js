@@ -665,19 +665,29 @@ function toggleNighMode() {
             nightMode = true;
         }
     })
+    animation
+        .fromTo('body', 0.25, 
+            {backgroundColor: 'rgba(35, 37, 38, 1.0)', color: 'rgba(223, 249, 251, 1.0)'}, 
+            {backgroundColor: 'rgba(245, 246, 250, 1.0)', color: 'rgba(35, 37, 38, 1.0)'})
+        .fromTo('.header', 0.25,
+            {color: 'rgba(223, 249, 251, 1.0)'},
+            {color: 'rgba(47, 54, 64,1.0)'}, -0.25)
+        .fromTo('.button', 0.25, 
+            {borderColor: 'rgba(223, 249, 251, .2)'},
+            {borderColor: 'rgba(47, 54, 64, .5)'}, -0.25)
+        .fromTo('.button-icon', 0.25,
+            {fill: 'rgba(223, 249, 251, .2)'},
+            {fill: 'rgba(47, 54, 64, .5)'}, -0.25)
+        // .fromTo('.button-icon:hover', 0.25, 
+        //     {fill: 'rgba(223, 249, 251, 1.0)'},
+        //     {fill: 'rgba(47, 54, 64, .5)'}, -0.25);
 
-    animation.fromTo('body', 0.5, {
-        backgroundColor: 'rgba(53, 59, 72,1.0)',
-
-    }, {
-            backgroundColor: 'rgba(223, 249, 251, 1.0)',
-        }).fromTo;
 
     if (nightMode) {
-        animation.play();
+        animation.play(0);
     }
     else {
-        animation.reverse();
+        animation.reverse(0);
     }
 
 }
