@@ -235,55 +235,45 @@ function showSettings() {
 
     // anti-spam protection
     if (!settingsActive) {
-
         settingsActive = true;
 
         var settingsButton = $("#settingsButton");
         var gearIcon = $('.button-icon.settings').first();
 
+
         // Animation on show
         const showSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; } });
-
         showSettingsAnimation
             // .to("#settingsBar", 0.1, {display: 'inline-block'}, 0.01)
             .staggerFromTo("#settingsBar .button", 0.15,
-                {
-                    opacity: 0,
-                    x: -70,
-                },
-                {
-                    opacity: 1,
-                    x: 0
-                }, 0.05
-            ).fromTo(".button-icon.nightmode", 0.25, {
-                rotation: 180,
-            }, { rotation: 145, }, 0.5);
+                { opacity: 0, x: -70 },
+                { opacity: 1, x: 0 }, 0.05)
+            .fromTo(".button-icon.nightmode", 0.25,
+                { rotation: 180 },
+                { rotation: 145, }, 0.5);
+
 
         // Animation on hide
         const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; $('#settingsBar').hide(); } });
-
         hideSettingsAnimation
             .to(".button-icon.nightmode", 0.5,
                 { rotation: '-=360' })
             .to("#settingsBar.button", 0.15,
-                {
-                    opacity: 0,
-                    x: 70
-                }, 0.25);
+                { opacity: 0, x: 70 }, 0.25);
 
         // check if settings bar has already active
         if (!settingsButton.hasClass('active')) {
             // if not -- activate and run show animation
             settingsButton.addClass('active');
             gearIcon.children().first().addClass('spin');
-            $('#settingsBar').show();
-            showSettingsAnimation.play();
+            $('#settingsBar').show(0);
+            showSettingsAnimation.play(0);
         }
         else {
             // else -- deactivate and run hide animation
             settingsButton.removeClass('active');
             gearIcon.children().first().removeClass('spin');
-            hideSettingsAnimation.play();
+            hideSettingsAnimation.play(0);
         }
     }
 }
@@ -525,14 +515,18 @@ function createInputModal() {
 
     // on Escape key press hide the modal
     $('body').first().on('keyup', function (e) {
-        if (e.key === "Escape" && $('#modalInput').length > 0) {
+        if (e.key === "Escape" && $('#modal').length > 0) {
             cancelCreatePlayer();
         }
     });
 }
 
+
+// function that create Confirmation Modal (clear resulst confirmation)
 function createConfirmModal() {
+    // confirmation flag. If true -- the results will be clear;
     var confirm = false;
+
     var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
     var modalBg = $('<div>').addClass('modal-bg');
     var modalWindow = $('<div>').addClass('modal-window');
@@ -551,81 +545,56 @@ function createConfirmModal() {
     modalDiv.append(modalBg);
     $('body').prepend(modalDiv);
 
+
+    // All elements appearing animation
     const appearAnimation = new TimelineLite({
         paused: true,
         onReverseComplete: function () {
             $('#modal').remove();
+            // Check the confirmation flag;
             if (confirm) clearResults();
         }
     });
+    appearAnimation
+        .to(".main", 0,
+            { webkitFilter: "blur(2px)", })
+        .fromTo(".modal-bg", 0.15,
+            { opacity: 0 },
+            { opacity: 1 })
+        .fromTo(".modal-window", 0.15,
+            { opacity: 0, y: -70 },
+            { opacity: 1, y: 0 })
+        .fromTo(".modal-cancel", 0.15,
+            { opacity: 0, width: 60, x: -60 },
+            { opacity: 1, width: 120, x: 0 })
+        .fromTo(".modal-accept", 0.15,
+            { display: '', opacity: 0, x: 60, width: 60 },
+            { display: 'block', opacity: 1, width: 120, x: 0 }, '-=0.15');
 
-    appearAnimation.to(".main", 0, {
-        webkitFilter: "blur(2px)",
-    }).fromTo(".modal-bg", 0.15,
-        {
-            opacity: 0,
-            // ease: Power0
-        },
-        {
-            opacity: 1,
-        }
-    ).fromTo(".modal-window", 0.15,
-        {
-            opacity: 0,
-            y: -70,
-            // ease: Power0
-        },
-        {
-            opacity: 1,
-            y: 0
-        }
-    ).fromTo(".modal-cancel", 0.15,
-        {
-            opacity: 0,
-            x: -60,
-            width: 60,
-            // ease: Power0
-        },
-        {
-            opacity: 1,
-            width: 120,
-            x: 0
-        }
-    ).fromTo(".modal-accept", 0.15,
-        {
-            display: 'none',
-            opacity: 0,
-            x: 60,
-            width: 60,
-            // ease: Power0
-        },
-        {
-            display: 'block',
-            opacity: 1,
-            width: 120,
-            x: 0
-        }, '-=0.15');
+    appearAnimation.play(0);
 
-    appearAnimation.play();
 
-    $('#modal').trigger('focus');
-
+    // Cancel clear results
     modalCancel.on('click', function () {
-        appearAnimation.reverse();
+        appearAnimation.reverse(0);
     })
 
-    $('#modal').on('keyup', function (e) {
-        if (e.key === 'Escape') {
-            appearAnimation.reverse();
+    // Close the modal window by Escape key press
+    $('body').first().on('keyup', function (e) {
+        if (e.key === "Escape" && $('#modal').length > 0) {
+            appearAnimation.reverse(0)
         }
-    })
+    });
 
+    // Accept clear results
     modalAccept.on('click', function () {
         confirm = true;
         appearAnimation.reverse();
     })
 }
 
+
+// Make screenshot function
 function makeScreenshot() {
     html2canvas($('#playerList')[0]).then(canvas => {
         var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
@@ -646,6 +615,8 @@ function makeScreenshot() {
         modalDiv.append(modalBg);
         $('body').prepend(modalDiv);
 
+
+        // Show modal animation
         const showModal = new TimelineLite({
             paused: true,
             onReverseComplete: function () {
@@ -653,58 +624,37 @@ function makeScreenshot() {
             }
         });
 
-        showModal.to(".main", 0, {
-            webkitFilter: "blur(2px)",
-        }).fromTo(".modal-bg", 0.15,
-            {
-                opacity: 0,
-                // ease: Power0
-            },
-            {
-                opacity: 1,
-            }
-        ).fromTo(".modal-window", 0.15,
-            {
-                opacity: 0,
-                y: -70,
-                // ease: Power0
-            },
-            {
-                opacity: 1,
-                y: 0
-            }
-        ).fromTo(".modal-accept", 0.15,
-            {
-                display: 'none',
-                opacity: 0,
-                x: 60,
-                width: 60,
-                // ease: Power0
-            },
-            {
-                display: 'block',
-                opacity: 1,
-                width: 120,
-                x: 0
-            }, '-=0.15');
+        showModal
+            .to(".main", 0, { webkitFilter: "blur(2px)" })
+            .fromTo(".modal-bg", 0.15,
+                { opacity: 0 },
+                { opacity: 1 })
+            .fromTo(".modal-window", 0.15,
+                { opacity: 0, y: -70 },
+                { opacity: 1, y: 0 })
+            .fromTo(".modal-accept", 0.15,
+                { display: 'none', opacity: 0, x: 60, width: 60, },
+                { display: 'block', opacity: 1, width: 120, x: 0 }, '-=0.15');
 
         var $canvas = $(".modal-image canvas").first();
         $canvas.css('height', "auto");
         $canvas.width(554);
-        // $canvas.height($parent.height());
-
-        $('#modal').on('keyup', function (e) {
-            if (e.key === "Escape") {
-                showModal.reverse();
-            }
-        });
 
         showModal.play();
+
+        // Close the modal window by Escape key press
+        $('body').first().on('keyup', function (e) {
+            if (e.key === "Escape" && $('#modal').length > 0) {
+                showModal.reverse(0)
+            }
+        });
 
         modalAccept.on('click', function () { showModal.reverse(); });
     });
 }
 
+
+// Toogle night mode function
 function toggleNighMode() {
     const animation = new TimelineLite({
         paused: true,
@@ -731,6 +681,8 @@ function toggleNighMode() {
     }
 
 }
+
+
 
 window.onload = function () {
     // Getting last session info
@@ -761,10 +713,12 @@ window.onload = function () {
     // adding keyboard control
     $('body').on('keyup', function (e) {
         switch (e.which) {
+            // O - open settings
             case 79:
                 if ($('#modal').length == 0)
                     showSettings();
                 break
+            // of settings Opened and P pressed -- show New Player Adding Window.
             case 80:
                 if ($("#settingsButton").hasClass('active') && $('#modal').length == 0) {
                     createInputModal();
