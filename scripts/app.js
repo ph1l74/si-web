@@ -244,36 +244,32 @@ function showSettings() {
         // Animation on show
         const showSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; } });
 
-        showSettingsAnimation.to("#settingsBar .button", 0.1, {
-            display: 'inline-block'
-        }, -0.5).staggerFromTo("#settingsBar .button", 0.15,
-            {
-                opacity: 0,
-                x: -70,
-            },
-            {
-                opacity: 1,
-                x: 0
-            }, 0.1
-        ).fromTo(".button-icon.nightmode", 0.25, {
-            rotation: 180,
-        }, { rotation: 145, }, 1.25);
+        showSettingsAnimation
+            // .to("#settingsBar", 0.1, {display: 'inline-block'}, 0.01)
+            .staggerFromTo("#settingsBar .button", 0.15,
+                {
+                    opacity: 0,
+                    x: -70,
+                },
+                {
+                    opacity: 1,
+                    x: 0
+                }, 0.05
+            ).fromTo(".button-icon.nightmode", 0.25, {
+                rotation: 180,
+            }, { rotation: 145, }, 0.5);
 
         // Animation on hide
-        const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; } });
+        const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; $('#settingsBar').hide(); } });
 
-        hideSettingsAnimation.to(".button-icon.nightmode", 0.5, {
-            rotation: '-=360',
-            ease: Power0.ease
-        }).fromTo("#settingsBar .button", 0.15,
-            {
-                opacity: 1,
-                x: 0
-            },
-            {
-                opacity: 0,
-                x: -70
-            }, 0).to('#settingsBar .button', 0.01, { display: 'none' }, 1)
+        hideSettingsAnimation
+            .to(".button-icon.nightmode", 0.5,
+                { rotation: '-=360' })
+            .to("#settingsBar.button", 0.15,
+                {
+                    opacity: 0,
+                    x: 70
+                }, 0.25);
 
         // check if settings bar has already active
         if (!settingsButton.hasClass('active')) {
@@ -291,6 +287,7 @@ function showSettings() {
         }
     }
 }
+
 
 // Create Modal with Input to input new player name
 function createInputModal() {
@@ -312,62 +309,36 @@ function createInputModal() {
     modalBg.append([modalWindow, modalButtons]);
     modalDiv.append(modalBg);
     $('body').prepend(modalDiv);
-
     $('#modalInput').trigger('focus');
+
 
     // All modal window elements animation
     const globalShowAnimation = new TimelineLite({
         paused: true,
-        onComplete: function() {
-            console.log('show start')
-        },
         onReverseComplete: function () {
             cancelCreateisActive = false;
-            console.log('close start')
             $('#modal').remove();
         }
     });
-
     globalShowAnimation
-        .fromTo(".main", 0, 
+        .fromTo(".main", 0,
             { webkitFilter: 'blur(0px)' },
             { webkitFilter: 'blur(2px)' })
         .fromTo(".modal-bg", 0.15,
-        {
-            opacity: 0,
-            // ease: Power0
-        },
-        {
-            opacity: 1,
-        }
-    ).fromTo(".modal-window", 0.15,
-        {
-            opacity: 0,
-            y: -70,
-            // ease: Power0
-        },
-        {
-            opacity: 1,
-            y: 0
-        }
-    ).fromTo(".modal-cancel", 0.15,
-        {
-            opacity: 0,
-            x: -60,
-            width: 60,
-            // ease: Power0
-        },
-        {
-            opacity: 1,
-            width: 120,
-            x: 0
-        });
-
+            { opacity: 0 },
+            { opacity: 1 })
+        .fromTo(".modal-window", 0.15,
+            { opacity: 0, y: -70 },
+            { opacity: 1, y: 0 })
+        .fromTo(".modal-cancel", 0.15,
+            { opacity: 0, x: -60, width: 60 },
+            { opacity: 1, width: 120, x: 0 });
 
 
     // Accept Button Appear Animation
-    const showAcceptAnimation = new TimelineLite({ paused: true });
-    showAcceptAnimation.fromTo('.modal-accept', 0.1, { display: 'none' }, { display: 'block' })
+    const showAcceptAnimation = new TimelineLite({ paused: true, onComplete: function () { console.log('1') } });
+    showAcceptAnimation
+        .to('.modal-accept', 0.1, { display: 'block' }, 0.1)
         .fromTo(".modal-accept", 0.15,
             {
                 opacity: 0,
@@ -380,8 +351,9 @@ function createInputModal() {
                 width: 120
             });
 
+
     // Accept Button Disappear Animation
-    const hideAcceptAnimation = new TimelineLite({ paused: true });
+    const hideAcceptAnimation = new TimelineLite({ paused: true, onComplete: function () { $('.modal-accept').first().hide() } });
     hideAcceptAnimation.fromTo(".modal-accept", 0.15,
         {
             opacity: 1,
@@ -394,7 +366,7 @@ function createInputModal() {
             x: 60,
             width: 60
             // ease: Power0
-        }).fromTo('.modal-accept', 0.1, { display: 'block' }, { display: 'none' }, 0.25);
+        });
 
 
     // Border decoration animation
@@ -428,10 +400,12 @@ function createInputModal() {
     // Text change animation
     var textChangeinAction = false;
     function animatedTextChange(text, classname, delay, mode, textDelay) {
+        // Anti-spam protection
         if (!textChangeinAction) {
             textChangeinAction = true;
             var textBefore = 'Введите имя нового игрока';
 
+            // Animation constructor
             const animationText = new TimelineLite({
                 paused: true,
                 onComplete: function () {
@@ -446,7 +420,7 @@ function createInputModal() {
                 opacity: 0
             })
 
-            animateBorder(mode, 0.3);
+            animateBorder(mode, 0.1);
             animationText.play();
 
             setTimeout(function () {
@@ -455,15 +429,16 @@ function createInputModal() {
                     animationText.reverse();
                 }
                 animationText.play();
-                animateBorder('init', 0.3);
+                animateBorder('init', 0.1);
             }, textDelay);
         }
     }
 
 
-    // hideAcceptAnimation.play();
     globalShowAnimation.play();
 
+
+    // Player name validation
     function acceptCreatePlayer(playerName) {
         var delay = 0.15
         var playerId = playerName.replace(/ /g, "_");
@@ -485,50 +460,58 @@ function createInputModal() {
         }
     }
 
+
+    // Create player cancelation function 
     var cancelCreateisActive = false;
     function cancelCreatePlayer() {
         if (!cancelCreateisActive) {
             cancelCreateisActive = true;
-            hideAcceptAnimation.play();
+            hideAcceptAnimation.play(0);
             globalShowAnimation.reverse(0);
         }
     }
 
+
+    // Input validation + animation
     $('#modalInput').on('keyup', function (e) {
         var input = $(e.target);
         if (input.val().length > 0) {
             if (input.val().search(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) < 0 && input.val().trim().length > 0) {
                 if (!input.hasClass('good')) {
                     input.addClass('good');
-                    showAcceptAnimation.play();
+                    showAcceptAnimation.play(0);
                 }
-                animateBorder('good', 0.15);
+                animateBorder('good', 0.1);
             }
             else {
                 if (input.hasClass('good')) {
                     input.removeClass('good');
                 }
-                hideAcceptAnimation.play();
-                animateBorder('bad', 0.15);
+                hideAcceptAnimation.play(0);
+                animateBorder('bad', 0.1);
             }
         }
         else {
             if (input.hasClass('good')) {
                 input.removeClass('good');
             }
-            hideAcceptAnimation.play();
-            // showAcceptAnimation.reverse(0);
-            animateBorder('bad', 0.15);
+            hideAcceptAnimation.play(0);
+            animateBorder('bad', 0.1);
         }
 
     });
 
+
+    // on Accept button click -- add new player
     $('.modal-accept').first().on('click', function () {
         var input = $('#modalInput').val().trim()
         acceptCreatePlayer(input);
     });
     modalCancel.click(cancelCreatePlayer);
 
+
+    // on Ctrl + Enter key press -- add  new player
+    // on Escape key press -- hide the modal
     $('#modalInput').on('keyup', function (e) {
         if (e.ctrlKey && e.keyCode == 13) {
             var input = $('#modalInput').val().trim()
@@ -536,15 +519,14 @@ function createInputModal() {
         }
         else if (e.key === "Escape") {
             cancelCreatePlayer();
-            // hideAcceptAnimation.play();
         }
     });
 
+
+    // on Escape key press hide the modal
     $('body').first().on('keyup', function (e) {
-        // if ()
         if (e.key === "Escape" && $('#modalInput').length > 0) {
             cancelCreatePlayer();
-            // hideAcceptAnimation.play();
         }
     });
 }

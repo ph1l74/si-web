@@ -77,10 +77,14 @@ body {
     /*IE*/
 }
 
+#settingsBar {
+    display: none;
+}
+
 #settingsBar .button {
     display: inline-block;
     opacity: 0;
-    /* margin-right: 0px; */
+    margin-right: 6px;
 }
 
 .button:hover {
@@ -91,6 +95,7 @@ body {
     transition: 0.5s fill;
     margin: 6px auto;
     fill: rgba(72, 84, 96, 1.0);
+    color: rgba(72, 84, 96, 1.0);
 }
 
 .button-icon:hover {
