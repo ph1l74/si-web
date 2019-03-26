@@ -43,7 +43,7 @@ body {
 
 #settingsButton {
     float: right;
-    margin-right: 0px;
+    margin-right: -6px;
 }
 
 /* Buttons block */
@@ -343,7 +343,7 @@ body {
     margin: auto;
 }
 
-.modal-accept, .modal-cancel {
+.modal-accept, .modal-cancel, .modal-download {
     transition: 0.25s background;
     border-radius: 4px;
     height: 60px;
@@ -365,13 +365,23 @@ body {
     background: rgba(0, 168, 255,1.0);
 }
 
-.modal-cancel {
+.modal-cancel{
     float: left;
     background: rgba(232, 65, 24,1.0);
 }
 
+.modal-download {
+    display: none;
+    float: left;
+    background: rgba(76, 209, 55,1.0);
+}
+
 .modal-accept:hover {
     background: rgba(0, 151, 230,1.0);
+}
+
+.modal-download:hover {
+    background: rgba(68, 189, 50,1.0);
 }
 
 .modal-cancel:hover {
@@ -384,5 +394,29 @@ body {
     /* width: 400px; */
 }
 
+/*  Table results */
 
+div#playerResults {
+    /* display: none; */
+    background: rgba(35, 37, 38, 1.0);
+    padding: 6px;
+    border-radius: 4px;
+}
 
+.player-results-div {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid rgba(245, 246, 250, 0.2);
+    margin-bottom: 6px;
+}
+
+.player-results-name {
+    display: table-cell;
+    width: 50%;
+}
+
+.player-results-scores {
+    display: table-cell;
+    width: 50%;
+    text-align: right;
+}
