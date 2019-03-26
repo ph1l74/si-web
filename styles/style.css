@@ -101,16 +101,21 @@ body {
     fill: rgba(128, 142, 155, 1.0);
 }
 
+.button-icon.daymode {
+    fill: rgba(35, 37, 38, .5);
+}
+
+
 .button-icon:active {
     fill: rgba(128, 142, 155, 1.0);
 }
 
-.button-icon.settings {
-    margin-right: 0px;
-}
-
 .button:hover .button-icon {
     fill: white;
+}
+
+.button:hover .button-icon.daymode {
+    fill: rgba(35, 37, 38, .2);
 }
 
 /* Player list */
@@ -287,7 +292,7 @@ body {
     background: rgba(0, 0, 0, 0.8);
     margin: 0px;
     padding: 0px;
-    height: 100%;
+    min-height: 100%;
     position: absolute;
     width: 100%;
 }
@@ -305,6 +310,7 @@ body {
     margin-bottom: 20px;
     margin-top: 200px;
 }
+
 
 .modal-window.screenshot {
     height: auto;
@@ -333,14 +339,11 @@ body {
     color: rgba(245, 246, 250, 1.0);
 }
 
-.modal-input {
-    /* border-color: rgba(232, 65, 24,1.0); */
-}
-
 .modal-buttons {
     width: 600px;
     height: 0px;
     margin: auto;
+    margin-bottom: 200px;
 }
 
 .modal-accept, .modal-cancel, .modal-download {
@@ -393,6 +396,21 @@ body {
     border-radius: 4px;
     /* width: 400px; */
 }
+
+.modal-sort {
+    float: right;
+    cursor: pointer;
+}
+
+.modal-sort svg {
+    transition: transform 0.25s ease;
+    fill: rgba(223, 249, 251, 1.0);
+}
+
+.modal-sort:hover svg {
+    transform: scale(0.9);
+}
+
 
 /*  Table results */
 

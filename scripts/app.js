@@ -244,7 +244,6 @@ function scoreMinus(playerId, cost) {
 
 // Show settings panel
 function showSettings() {
-
     // anti-spam protection
     if (!settingsActive) {
         settingsActive = true;
@@ -256,10 +255,10 @@ function showSettings() {
         // Animation on show
         const showSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; } });
         showSettingsAnimation
-            // .to("#settingsBar", 0.1, {display: 'inline-block'}, 0.01)
+            .to("#settingsButton svg", 0.4, { rotation: '+=135' })
             .staggerFromTo("#settingsBar .button", 0.15,
                 { opacity: 0, x: -70 },
-                { opacity: 1, x: 0 }, 0.05)
+                { opacity: 1, x: 0 }, 0.05, -0.125)
             .fromTo(".button-icon.nightmode", 0.25,
                 { rotation: 180 },
                 { rotation: 145, }, 0.5);
@@ -277,14 +276,12 @@ function showSettings() {
         if (!settingsButton.hasClass('active')) {
             // if not -- activate and run show animation
             settingsButton.addClass('active');
-            gearIcon.children().first().addClass('spin');
-            $('#settingsBar').show(0);
+            $('#settingsBar').show();
             showSettingsAnimation.play(0);
         }
         else {
             // else -- deactivate and run hide animation
             settingsButton.removeClass('active');
-            gearIcon.children().first().removeClass('spin');
             hideSettingsAnimation.play(0);
         }
     }
@@ -586,22 +583,23 @@ function createConfirmModal() {
     appearAnimation.play(0);
 
 
+
     // Cancel clear results
     modalCancel.on('click', function () {
-        appearAnimation.reverse(0);
+        if (!appearAnimation.isActive()) appearAnimation.reverse(0);
     })
 
     // Close the modal window by Escape key press
     $('body').first().on('keyup', function (e) {
         if (e.key === "Escape" && $('#modal').length > 0) {
-            appearAnimation.reverse(0)
+            if (!appearAnimation.isActive()) appearAnimation.reverse(0)
         }
     });
 
     // Accept clear results
     modalAccept.on('click', function () {
         confirm = true;
-        appearAnimation.reverse();
+        if (!appearAnimation.isActive()) appearAnimation.reverse(0);
     })
 }
 
@@ -609,6 +607,9 @@ function createConfirmModal() {
 // Make screenshot function
 function makeScreenshot() {
 
+    var sorted = false;
+
+    // Function that fill the result table
     function fillTable(sort = false) {
         function fill(array) {
             for (var playerId in array) {
@@ -616,7 +617,7 @@ function makeScreenshot() {
             }
         }
         if (sort) {
-
+            // sort algorythm
             var arr = [];
             for (var prop in cStats) {
                 if (cStats.hasOwnProperty(prop)) {
@@ -626,13 +627,11 @@ function makeScreenshot() {
                     arr.push(obj);
                 }
             }
-
             arr.sort(function (a, b) {
                 var at = a.tempSortScores,
                     bt = b.tempSortScores;
                 return at < bt ? 1 : (at > bt ? -1 : 0);
             });
-
             var result = [];
             for (var i = 0, l = arr.length; i < l; i++) {
                 var obj = arr[i];
@@ -645,43 +644,51 @@ function makeScreenshot() {
                 var item = obj[id];
                 result.push(item);
             }
+            // fill sorted list
             fill(result);
         }
         else {
+            // fill unsorted list
             fill(cStats)
         }
     }
 
+
+    // DOM constructor
     var modalDiv = $('<div>').addClass('modal').prop({ id: 'modal' });
-    var modalBg = $('<div>').addClass('modal-bg');
+    var modalBg = $('<div>').addClass('modal-bg').addClass('screenshot')
     var modalWindow = $('<div>').addClass('modal-window screenshot');
     var modalImage = $('<div>').addClass('modal-image').prop({ id: 'modalImage' });
     var modalButtons = $('<div>').addClass('modal-buttons');
     var modalText = $('<div>').addClass('modal-text');
+    var modalSort = $('<div>').addClass('modal-sort');
+    var modalSortIcon = $('<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
     var modalDownload = $('<div>').addClass('modal-download');
-    // var modalDownloadLink = $('<a>').addClass('modal-download-link');
-    // var modalShare = $('<div>').addClass('modal-share');
     var modalAccept = $('<div>').addClass('modal-accept');
     var playerResults = $('<div>').addClass('player-results-table').prop({ id: 'playerResults' });
 
     modalAccept.text('Ок');
     modalText.text("Скриншот результатов:");
     modalDownload.text('Скачать');
-
-    modalWindow.append([modalText, playerResults, modalImage]);
+    modalSort.append(modalSortIcon);
+    modalWindow.append([modalSort, modalText, playerResults, modalImage]);
     // modalDownload.append(modalDownloadLink);
     modalButtons.append([modalDownload, modalAccept]);
     modalBg.append([modalWindow, modalButtons]);
     modalDiv.append(modalBg);
     $('body').prepend(modalDiv);
 
-    fillTable(true);
+
+    // Fill table without sort
+    fillTable();
+
 
     // Show modal animation
     const showModal = new TimelineLite({
         paused: true,
         onReverseComplete: function () {
-            $('#modal').remove();
+            closingInAction = false,
+                $('#modal').remove();
         }
     });
     showModal
@@ -698,51 +705,76 @@ function makeScreenshot() {
 
     showModal.play(0);
 
-    const showDownload = new TimelineLite({ paused: true })
+
+    // Show download button animation
+    const showDownload = new TimelineLite({ paused: true, onReverseComplete: function () { closingInAction = false } })
     showDownload
         .fromTo(".modal-download", 0.15,
             { display: '', opacity: 0, x: -60, width: 60, },
             { display: 'block', opacity: 1, width: 120, x: 0 }, '-=0.15')
 
-    html2canvas($('#playerResults')[0]).then(canvas => {
 
-        // $('#modalImage').append(canvas);
-
-        canvas.toBlob(function (blob) {
-            var reader = new FileReader();
-
-            reader.onloadend = function () {
-                var base64 = reader.result;
-                var downloadButton = $('.modal-download')[0];
-
-                function debugBase64() {
-                    var win = window.open();
-                    win.document.write('<iframe src="' + base64 + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
-                }
-
-                $(downloadButton).on('click', function () { debugBase64() });
-                // $(link).attr('href', base64);
-                // $(link).attr('donwload', 'image-result.png');
-                showDownload.play(0);
-            };
-            reader.readAsDataURL(blob);
-        })
-
-        var $canvas = $(".modal-image canvas").first();
-        $canvas.css('height', "auto");
-        $canvas.width(554);
-
-    });
-
-    // Close the modal window by Escape key press
-    $('body').first().on('keyup', function (e) {
-        if (e.key === "Escape" && $('#modal').length > 0) {
+    // Close modal window animation
+    function closeScreenshotModal() {
+        if(!showDownload.isActive() && !showDownload.isActive()){
             showDownload.reverse(0);
             showModal.reverse(0);
         }
+    }
+
+
+    // render image function
+    function renderImage() {
+        html2canvas($('#playerResults')[0], {logging: false}).then(canvas => {
+
+            // $('#modalImage').append(canvas);
+
+            canvas.toBlob(function (blob) {
+                var reader = new FileReader();
+
+                reader.onloadend = function () {
+                    var base64 = reader.result;
+                    var downloadButton = $('.modal-download')[0];
+
+                    function debugBase64() {
+                        var win = window.open();
+                        win.document.write('<iframe src="' + base64 + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+                    }
+
+                    $(downloadButton).on('click', function () { debugBase64() });
+                    showDownload.play(0);
+                };
+                reader.readAsDataURL(blob);
+            })
+
+            // var $canvas = $(".modal-image canvas").first();
+            // $canvas.css('height', "auto");
+            // $canvas.width(554);
+        });
+    }
+
+    renderImage();
+
+    $('.modal-sort').first().on('click', function () {
+        if (!sorted) {
+            sorted = true;
+        }
+        else {
+            sorted = false;
+        }
+        $('#playerResults').empty();
+        fillTable(sorted)
+        renderImage();
+      })
+
+    // Close the modal window by Escape key press
+    $('body').first().on('keyup', function (e) {
+        if (e.key === "Escape" && $('#modal').length > 0 ) {
+            closeScreenshotModal();
+        }
     });
 
-    modalAccept.on('click', function () { showModal.reverse(); });
+    modalAccept.on('click', function () { closeScreenshotModal(); });
 }
 
 
@@ -751,12 +783,17 @@ function toggleNighMode() {
     const animation = new TimelineLite({
         paused: true,
         onComplete: function () {
+            $('.button-icon').addClass('daymode');
+            $('.modal-window').addClass('daymode');
             nightMode = false;
         },
         onReverseComplete: function () {
+            $('.button-icon').removeClass('daymode');
+            $('.modal-window').removeClass('daymode');
             nightMode = true;
         }
     })
+
     animation
         .fromTo('body', 0.25,
             { backgroundColor: 'rgba(35, 37, 38, 1.0)', color: 'rgba(223, 249, 251, 1.0)' },
@@ -764,15 +801,9 @@ function toggleNighMode() {
         .fromTo('.header', 0.25,
             { color: 'rgba(223, 249, 251, 1.0)' },
             { color: 'rgba(47, 54, 64,1.0)' }, -0.25)
-        .fromTo('.button', 0.25,
-            { borderColor: 'rgba(223, 249, 251, .2)' },
-            { borderColor: 'rgba(47, 54, 64, .5)' }, -0.25)
-        .fromTo('.button-icon', 0.25,
-            { fill: 'rgba(223, 249, 251, .2)' },
-            { fill: 'rgba(47, 54, 64, .5)' }, -0.25)
-    // .fromTo('.button-icon:hover', 0.25, 
-    //     {fill: 'rgba(223, 249, 251, 1.0)'},
-    //     {fill: 'rgba(47, 54, 64, .5)'}, -0.25);
+        .fromTo('.header', 0.25,
+            { borderColor: 'rgba(223, 249, 251, 1.0)' },
+            { borderColor: 'rgba(47, 54, 64,1.0)' }, -0.25)
 
 
     if (nightMode) {
@@ -804,12 +835,14 @@ window.onload = function () {
         }
     }
 
+    nightMode = getCookie('nightMode');
+
     // linking functions to buttons
     $('#settingsButton').click(showSettings);
     $('#addPlayer').click(createInputModal);
     $('#clearResults').click(createConfirmModal);
     $('#screenShot').click(makeScreenshot);
-    // $('#nightMode').click(toggleNighMode);
+    $('#nightMode').click(toggleNighMode);
 
 
     // adding keyboard control
