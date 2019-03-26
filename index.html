@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Система подсчета очков Своей Игры</title>
+    <title>Система Подсчета Очков Своей Игры</title>
     <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <!-- integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
@@ -22,6 +22,7 @@
     <script src="scripts/TimelineLite.min.js"></script>
     <script src="scripts/TweenLite.min.js"></script>
     <script src="scripts/CSSPlugin.min.js"></script>
+    <script src='scripts/anime.min.js'></script>
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/jquery-ui.min.js"></script>
     <script src="scripts/html2canvas.min.js"></script>
@@ -74,9 +75,12 @@
                 <div id="nightMode" class="button">
                     <div class="button-icon nightmode">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                            <path
-                                d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z" />
-                            <path d="M0 0h24v24H0z" fill="none" /></svg>
+                            <!-- <path id="nightmodeicon" -->
+                                <!-- d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z" /> -->
+                                <path id="nightmodeicon"
+                                d="M24,10.55c0,5.82-4.72,10.55-10.55,10.55S2.91,16.37,2.91,10.55S7.63,0,13.45,0H12C5.37,0,0,5.37,0,12s5.37,12,12,12s12-5.37,12-12V10.55z" />
+                            <!-- <path d="M0 0h24v24H0z" fill="none" /> -->
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -85,5 +89,4 @@
     </div>
     </div>
 </body>
-
 </html>

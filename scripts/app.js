@@ -260,8 +260,8 @@ function showSettings() {
                 { opacity: 0, x: -70 },
                 { opacity: 1, x: 0 }, 0.05, -0.125)
             .fromTo(".button-icon.nightmode", 0.25,
-                { rotation: 180 },
-                { rotation: 145, }, 0.5);
+                { rotation: nightMode ? 45 : 0},
+                { rotation: 0}, 0.5);
 
 
         // Animation on hide
@@ -779,18 +779,36 @@ function makeScreenshot() {
 
 
 // Toogle night mode function
-function toggleNighMode() {
+function toggleNightMode() {
+
     const animation = new TimelineLite({
         paused: true,
         onComplete: function () {
             $('.button-icon').addClass('daymode');
             $('.modal-window').addClass('daymode');
             nightMode = false;
+            setCookie('nightMode', JSON.stringify(nightMode), 2);
+
+            const toSun = anime.timeline({
+                duration: 750,
+                easing: 'easeOutExpo',
+                targets: "#nightmodeicon",
+                d: [{ value : "M24,10.55C24,16.37,17.82,0,12,0S24,16.37,24,10.55S7.63,0,13.45,0H12C5.37,0,0,5.37,0,12s5.37,12,12,12s12-5.37,12-12V10.55z"}]
+            });            
         },
         onReverseComplete: function () {
             $('.button-icon').removeClass('daymode');
             $('.modal-window').removeClass('daymode');
             nightMode = true;
+            setCookie('nightMode', JSON.stringify(nightMode), 2);
+
+            const toMoon = anime.timeline({
+                duration: 750,
+                easing: 'easeOutExpo',
+                targets: "#nightmodeicon",
+                d: [{ value : "M24,10.55c0,5.82-4.72,10.55-10.55,10.55S2.91,16.37,2.91,10.55S7.63,0,13.45,0H12C5.37,0,0,5.37,0,12s5.37,12,12,12s12-5.37,12-12V10.55z"}]
+            });
+
         }
     })
 
@@ -804,15 +822,13 @@ function toggleNighMode() {
         .fromTo('.header', 0.25,
             { borderColor: 'rgba(223, 249, 251, 1.0)' },
             { borderColor: 'rgba(47, 54, 64,1.0)' }, -0.25)
-
-
+        
     if (nightMode) {
         animation.play(0);
     }
     else {
         animation.reverse(0);
     }
-
 }
 
 
@@ -835,14 +851,20 @@ window.onload = function () {
         }
     }
 
-    nightMode = getCookie('nightMode');
 
+    nightMode = getCookie('nightMode');
+    if (nightMode == 'false') {
+        toggleNightMode();
+    }
+    else if (nightMode == 'true')
+        nightMode = true;
+    
     // linking functions to buttons
     $('#settingsButton').click(showSettings);
     $('#addPlayer').click(createInputModal);
     $('#clearResults').click(createConfirmModal);
     $('#screenShot').click(makeScreenshot);
-    $('#nightMode').click(toggleNighMode);
+    $('#nightMode').click(toggleNightMode);
 
 
     // adding keyboard control
