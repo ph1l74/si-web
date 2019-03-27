@@ -733,7 +733,6 @@ function makeScreenshot() {
 
             canvas.toBlob(function (blob) {
                 var downloadButton = $('.modal-download')[0];
-                console.log('blob', blob);
                 $(downloadButton).off('click');
                 $(downloadButton).on('click', function () { saveAs(blob, 'image.jpeg') });
                 showDownload.play(0);
@@ -751,7 +750,6 @@ function makeScreenshot() {
         else {
             sorted = false;
         }
-        console.log('sorted :', sorted);
         $('#playerResults').empty();
         fillTable(sorted);
         renderImage();
