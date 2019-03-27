@@ -198,6 +198,7 @@ function clearResults() {
     const disappearAnimation = new TimelineLite({
         paused: true,
         onComplete: function () {
+            console.log('huerga');
             clearPlayerList();
             cStats = {};
             setCookie('stats', JSON.stringify(cStats), 2);
@@ -213,7 +214,7 @@ function clearResults() {
             scale: 0,
         }, -0.05
     );
-    disappearAnimation.play();
+    disappearAnimation.play(0);
 }
 
 
@@ -559,7 +560,10 @@ function createConfirmModal() {
         onReverseComplete: function () {
             $('#modal').remove();
             // Check the confirmation flag;
-            if (confirm) clearResults();
+            if (confirm) { 
+                clearResults();
+                confirm = false; 
+            };
         }
     });
     appearAnimation
@@ -579,7 +583,6 @@ function createConfirmModal() {
             { display: 'block', opacity: 1, width: 120, x: 0 }, '-=0.15');
 
     appearAnimation.play(0);
-
 
 
     // Cancel clear results
