@@ -447,3 +447,101 @@ div#playerResults {
 #daymodeicon {
     opacity: 0;
 }
+
+/* Mobile devices adaptation */
+
+/* Galaxy S5 */
+
+@media screen and (max-width: 694px) and (orientation: portrait) { 
+    .main {
+        margin-top: 20px;
+    }
+
+    .header {
+        margin-top: 0px;
+    }
+
+    .playerDiv {
+        width: 90%;
+        padding-right: 10px;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+
+    .minusButton {
+        margin-right: 10px;
+    }
+
+    .button {
+        border: none;
+        width: 40px;
+        height: 40px;
+    }
+
+    .button-icon {
+        margin: 0px;
+    }
+
+    .modal-window {
+        width: 300px;
+    }
+
+    .modal-buttons {
+        width: 344px;
+    }
+
+    .modal-input {
+        width: 100%;
+    }
+
+    .modal-text {
+        font-size:1.3em;
+    }
+
+    .modal-image canvas {
+        width: 300px !important;
+        height: auto !important;
+    }
+
+    div#playerResults {
+        width: 288px;
+    }
+
+    #settingsButton{
+        margin-right: -2px;
+    }
+
+    .blankTable {
+        margin-top: 0px;
+    }
+    
+    .playerScores {
+        width: 10%;
+    }
+}
+
+/*  Pixel2 */
+
+@media screen and (max-width: 694px) and (orientation: landscape) {
+
+    .main {
+        margin-top: 20px;
+    }
+
+    .header{
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .modal-window{
+        margin-top: calc(10%);
+    }
+}
+
+@media screen and (max-width: 731px) and (orientation: landscape) {
+    .header {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+}
+
