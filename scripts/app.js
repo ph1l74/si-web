@@ -258,15 +258,13 @@ function showSettings() {
                 { opacity: 0, x: -70 },
                 { opacity: 1, x: 0 }, 0.05, -0.125)
             .fromTo(".button-icon.nightmode", 0.25,
-                { rotation: nightMode ? -25 : 0, rotationY: nightMode ? 180 : ''},
-                { rotation: nightMode ? -45 : 0, rotationY: nightMode ? 180 : ''}, 0.5);
+                { rotation: nightMode ? -25 : 0, rotationY: nightMode ? 180 : '' },
+                { rotation: nightMode ? -45 : 0, rotationY: nightMode ? 180 : '' }, 0.5);
 
 
         // Animation on hide
         const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; $('#settingsBar').hide(); } });
         hideSettingsAnimation
-            .to(".button-icon.nightmode", 0.5,
-                { rotation: nightMode ? '-=360' : '' })
             .to("#settingsBar.button", 0.15,
                 { opacity: 0, x: 70 }, 0.25);
 
@@ -333,7 +331,7 @@ function createInputModal() {
 
 
     // Accept Button Appear Animation
-    const showAcceptAnimation = new TimelineLite({ paused: true});
+    const showAcceptAnimation = new TimelineLite({ paused: true });
     showAcceptAnimation
         .to('.modal-accept', 0.1, { display: 'block' }, 0.1)
         .fromTo(".modal-accept", 0.15,
@@ -559,9 +557,9 @@ function createConfirmModal() {
         onReverseComplete: function () {
             $('#modal').remove();
             // Check the confirmation flag;
-            if (confirm) { 
+            if (confirm) {
                 clearResults();
-                confirm = false; 
+                confirm = false;
             };
         }
     });
@@ -611,6 +609,7 @@ function makeScreenshot() {
 
     // Function that fill the result table
     function fillTable(sort = false) {
+        $('#playerResults').show();
         function fill(array) {
             for (var playerId in array) {
                 createPlayerResultsRow(array[playerId].name, array[playerId].scores);
@@ -664,6 +663,7 @@ function makeScreenshot() {
     var modalSort = $('<div>').addClass('modal-sort');
     var modalSortIcon = $('<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
     var modalDownload = $('<div>').addClass('modal-download');
+    var modalDownloadLink = $('<a>').addClass('modal-download-link');
     var modalAccept = $('<div>').addClass('modal-accept');
     var playerResults = $('<div>').addClass('player-results-table').prop({ id: 'playerResults' });
 
@@ -672,7 +672,7 @@ function makeScreenshot() {
     modalDownload.text('Скачать');
     modalSort.append(modalSortIcon);
     modalWindow.append([modalSort, modalText, playerResults, modalImage]);
-    // modalDownload.append(modalDownloadLink);
+    modalDownload.append(modalDownloadLink);
     modalButtons.append([modalDownload, modalAccept]);
     modalBg.append([modalWindow, modalButtons]);
     modalDiv.append(modalBg);
@@ -716,7 +716,7 @@ function makeScreenshot() {
 
     // Close modal window animation
     function closeScreenshotModal() {
-        if(!showDownload.isActive() && !showDownload.isActive()){
+        if (!showDownload.isActive() && !showDownload.isActive()) {
             showDownload.reverse(0);
             showModal.reverse(0);
         }
@@ -725,32 +725,20 @@ function makeScreenshot() {
 
     // render image function
     function renderImage() {
-        html2canvas($('#playerResults')[0], {logging: false}).then(canvas => {
+        html2canvas($('#playerResults')[0], { logging: false }).then(canvas => {
 
-            // $('#modalImage').append(canvas);
+            $('#playerResults').hide();
+            $('#modalImage').empty();
+            $('#modalImage').append(canvas);
 
             canvas.toBlob(function (blob) {
-                var reader = new FileReader();
+                var downloadButton = $('.modal-download')[0];
+                console.log('blob', blob);
+                $(downloadButton).off('click');
+                $(downloadButton).on('click', function () { saveAs(blob, 'image.jpeg') });
+                showDownload.play(0);
 
-                reader.onloadend = function () {
-                    var base64 = reader.result;
-                    var downloadButton = $('.modal-download')[0];
-
-                    function debugBase64(data) {
-                        var win = window.open();
-                        win.document.write('<iframe src="' + data + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
-                        win.document.close();
-                    }
-
-                    $(downloadButton).on('click', function () { debugBase64(base64) });
-                    showDownload.play(0);
-                };
-                reader.readAsDataURL(blob);
-            })
-
-            // var $canvas = $(".modal-image canvas").first();
-            // $canvas.css('height', "auto");
-            // $canvas.width(554);
+            }, 'image/png')
         });
     }
 
@@ -766,12 +754,12 @@ function makeScreenshot() {
         console.log('sorted :', sorted);
         $('#playerResults').empty();
         fillTable(sorted);
-        setTimeout(function(){renderImage();}, 300);
-      })
+        renderImage();
+    })
 
     // Close the modal window by Escape key press
     $('body').first().on('keyup', function (e) {
-        if (e.key === "Escape" && $('#modal').length > 0 ) {
+        if (e.key === "Escape" && $('#modal').length > 0) {
             closeScreenshotModal();
         }
     });
@@ -791,13 +779,12 @@ function toggleNightMode() {
             nightMode = false;
             setCookie('nightMode', JSON.stringify(nightMode), 2);
 
-            const toSun = anime.timeline({
-                duration: 250,
-                easing: 'easeOutExpo',
-                targets: "#nightmodeicon",
-                opacity: 0,
-            });            
-            toSun.add({targets: '#daymodeicon', opacity: 1})
+            const toSun = new TimelineLite({ paused: true });
+            toSun
+                .to('#nightmodeicon', 0.1, { opacity: 0 })
+                .to('#daymodeicon', 0.1, { opacity: 1 });
+
+            toSun.play(0);
         },
         onReverseComplete: function () {
             $('.button-icon').removeClass('daymode');
@@ -805,13 +792,12 @@ function toggleNightMode() {
             nightMode = true;
             setCookie('nightMode', JSON.stringify(nightMode), 2);
 
-            const toMoon = anime.timeline({
-                duration: 250,
-                easing: 'easeOutExpo',
-                targets: "#daymodeicon",
-                opacity: 0
-            });
-            toMoon.add({targets: '#nightmodeicon', opacity: 1})
+            const toMoon = new TimelineLite({ paused: true });
+            toMoon
+                .to('#daymodeicon', 0.1, { opacity: 0 })
+                .to('#nightmodeicon', 0.1, { opacity: 1, rotationY: 180 });
+
+            toMoon.play(0);
 
         }
     })
@@ -826,7 +812,7 @@ function toggleNightMode() {
         .fromTo('.header', 0.25,
             { borderColor: 'rgba(223, 249, 251, 1.0)' },
             { borderColor: 'rgba(47, 54, 64,1.0)' }, -0.25)
-        
+
     if (nightMode) {
         animation.play(0);
     }
@@ -862,7 +848,7 @@ window.onload = function () {
     }
     else if (nightMode == 'true')
         nightMode = true;
-    
+
     // linking functions to buttons
     $('#settingsButton').click(showSettings);
     $('#addPlayer').click(createInputModal);

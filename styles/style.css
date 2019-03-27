@@ -381,7 +381,7 @@ body {
 }
 
 .modal-image canvas {
-    border: 3px solid rgba(0, 168, 255,1.0);
+    /* border: 3px solid rgba(0, 168, 255,1.0); */
     border-radius: 4px;
     /* width: 400px; */
 }
@@ -407,7 +407,10 @@ div#playerResults {
     /* display: none; */
     background: rgba(35, 37, 38, 1.0);
     padding: 6px;
-    border-radius: 4px;
+    /* border-radius: 4px; */
+    position: absolute;
+    width: 91%;
+    z-index: -1;
 }
 
 .player-results-div {
