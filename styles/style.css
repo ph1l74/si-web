@@ -266,7 +266,7 @@ body {
     font-weight: 400;
     font-size: 1.2em;
     text-align: center;
-    color: rgba(223, 249, 251, 1.0);
+    /* color: rgba(223, 249, 251, 1.0); */
 }
 
 .blankTableTitle {

@@ -66,7 +66,6 @@ function createScoresDiv(playerId, mode) {
 
     (mode === 'plus') ? scoresUl.addClass('plus') : scoresUl.addClass('minus');
 
-
     var scoresCosts = [scores10, scores20, scores30, scores40, scores50];
 
     scoresUl.append(scoresCosts);
@@ -76,12 +75,11 @@ function createScoresDiv(playerId, mode) {
     const changeAnimation = new TimelineLite({
         paused: true,
         onComplete: function () {
-            animation = this;
             $.each(scoresCosts, function (index, el) {
                 el.on('click', function () {
                     (mode === 'plus') ? scorePlus(playerId, el.data('cost')) : scoreMinus(playerId, el.data('cost'));
                     $('#' + scoresDivId).fadeOut(150);
-                    animation.reverse();
+                    changeAnimation.reverse(0);
                     $('#' + scoresDivId).remove();
                 });
             });
@@ -96,7 +94,7 @@ function createScoresDiv(playerId, mode) {
         display: 'none'
     });
 
-    changeAnimation.play();
+    changeAnimation.play(0);
 
 
 }
@@ -152,7 +150,7 @@ function createPlayerRow(playerId, playerName, playerScores) {
                 y: 0
             }
         );
-        animation.play();
+        animation.play(0);
     }
 
     animateCreation(playerId);
@@ -736,12 +734,13 @@ function makeScreenshot() {
                     var base64 = reader.result;
                     var downloadButton = $('.modal-download')[0];
 
-                    function debugBase64() {
+                    function debugBase64(data) {
                         var win = window.open();
-                        win.document.write('<iframe src="' + base64 + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+                        win.document.write('<iframe src="' + data + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+                        win.document.close();
                     }
 
-                    $(downloadButton).on('click', function () { debugBase64() });
+                    $(downloadButton).on('click', function () { debugBase64(base64) });
                     showDownload.play(0);
                 };
                 reader.readAsDataURL(blob);
@@ -762,9 +761,10 @@ function makeScreenshot() {
         else {
             sorted = false;
         }
+        console.log('sorted :', sorted);
         $('#playerResults').empty();
-        fillTable(sorted)
-        renderImage();
+        fillTable(sorted);
+        setTimeout(function(){renderImage();}, 300);
       })
 
     // Close the modal window by Escape key press
