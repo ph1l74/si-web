@@ -282,7 +282,7 @@ body {
     margin: 0px;
     padding: 0px;
     min-height: 100%;
-    position: absolute;
+    position: fixed;
     width: 100%;
 }
 
@@ -518,6 +518,15 @@ div#playerResults {
     .playerScores {
         width: 10%;
     }
+
+    .modal-window.screenshot {
+        margin-top: 80px;
+    }
+
+    #modalImage {
+        max-height: 350px;
+        overflow: scroll;
+    }
 }
 
 /*  Pixel2 */
@@ -545,3 +554,121 @@ div#playerResults {
     }
 }
 
+/* Iphone 5s */
+
+@media screen and (max-width: 320px) and (orientation: portrait) {
+    .header {
+        font-size: 1.4em;
+        margin-top: 0px;
+        margin-bottom: 10px;
+    }
+
+    .playerDiv {
+        font-size: 1em;
+    }
+
+    .playerDiv:nth-child(1) {
+        margin-top: 20px;
+    }
+
+    .modal-window {
+        width: 260px;
+        height: auto;
+        margin-top: 25%;
+    }
+
+    .modal-window.screenshot {
+        max-height: 300px;
+    }
+
+    .modal-buttons {
+        width: 304px;
+    }
+
+    .modal-image canvas {
+        width: 260px !important;
+        height: auto !important;
+    }
+
+    div#playerResults {
+        width: 248px;
+    }
+
+    #modalImage {
+        max-height: 200px;
+        overflow: scroll;
+    }
+}
+
+@media screen and (max-width: 568px) and (orientation: landscape) {
+    .header {
+        font-size: 1.5em;
+    }
+
+    .blankTable {
+        margin-top: 20px;
+    }
+
+    .modal-window {
+        width: 400px;
+    }
+
+    .modal-buttons {
+        width: 446px;
+    }
+
+    .modal-input {
+        width: 100%;
+    }
+
+    #modalImage {
+        max-height: 60px;
+        overflow: scroll;
+    }
+
+    .modal-image canvas {
+        width: 400px !important;
+        height: auto !important;
+    }
+
+    .playerDiv {
+        width: 98%;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+
+    #settingsButton {
+        margin-right: 0px;
+    }
+}
+
+/* iPhone 6/7 */
+
+
+@media screen and (max-width: 812px) and (orientation: landscape) {
+    .header {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .playerDiv:nth-child(1) {
+        margin-top: 20px;
+    }
+
+    .modal-window {
+        margin-top: 10%;
+    }
+
+    .modal-window.screenshot {
+        margin-top: 5%;
+    }
+
+    .modal-bg {
+        position: fixed;
+    }
+
+    #modalImage {
+        max-height: 140px;
+        overflow: scroll;
+    }
+}
