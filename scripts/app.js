@@ -198,7 +198,6 @@ function clearResults() {
     const disappearAnimation = new TimelineLite({
         paused: true,
         onComplete: function () {
-            console.log('huerga');
             clearPlayerList();
             cStats = {};
             setCookie('stats', JSON.stringify(cStats), 2);
@@ -259,15 +258,15 @@ function showSettings() {
                 { opacity: 0, x: -70 },
                 { opacity: 1, x: 0 }, 0.05, -0.125)
             .fromTo(".button-icon.nightmode", 0.25,
-                { rotation: nightMode ? 45 : 0},
-                { rotation: 0}, 0.5);
+                { rotation: nightMode ? -25 : 0, rotationY: nightMode ? 180 : ''},
+                { rotation: nightMode ? -45 : 0, rotationY: nightMode ? 180 : ''}, 0.5);
 
 
         // Animation on hide
         const hideSettingsAnimation = new TimelineLite({ paused: true, onComplete: function () { settingsActive = false; $('#settingsBar').hide(); } });
         hideSettingsAnimation
             .to(".button-icon.nightmode", 0.5,
-                { rotation: '-=360' })
+                { rotation: nightMode ? '-=360' : '' })
             .to("#settingsBar.button", 0.15,
                 { opacity: 0, x: 70 }, 0.25);
 
@@ -334,7 +333,7 @@ function createInputModal() {
 
 
     // Accept Button Appear Animation
-    const showAcceptAnimation = new TimelineLite({ paused: true, onComplete: function () { console.log('1') } });
+    const showAcceptAnimation = new TimelineLite({ paused: true});
     showAcceptAnimation
         .to('.modal-accept', 0.1, { display: 'block' }, 0.1)
         .fromTo(".modal-accept", 0.15,
@@ -793,11 +792,12 @@ function toggleNightMode() {
             setCookie('nightMode', JSON.stringify(nightMode), 2);
 
             const toSun = anime.timeline({
-                duration: 750,
+                duration: 250,
                 easing: 'easeOutExpo',
                 targets: "#nightmodeicon",
-                d: [{ value : "M24,10.55C24,16.37,17.82,0,12,0S24,16.37,24,10.55S7.63,0,13.45,0H12C5.37,0,0,5.37,0,12s5.37,12,12,12s12-5.37,12-12V10.55z"}]
+                opacity: 0,
             });            
+            toSun.add({targets: '#daymodeicon', opacity: 1})
         },
         onReverseComplete: function () {
             $('.button-icon').removeClass('daymode');
@@ -806,11 +806,12 @@ function toggleNightMode() {
             setCookie('nightMode', JSON.stringify(nightMode), 2);
 
             const toMoon = anime.timeline({
-                duration: 750,
+                duration: 250,
                 easing: 'easeOutExpo',
-                targets: "#nightmodeicon",
-                d: [{ value : "M24,10.55c0,5.82-4.72,10.55-10.55,10.55S2.91,16.37,2.91,10.55S7.63,0,13.45,0H12C5.37,0,0,5.37,0,12s5.37,12,12,12s12-5.37,12-12V10.55z"}]
+                targets: "#daymodeicon",
+                opacity: 0
             });
+            toMoon.add({targets: '#nightmodeicon', opacity: 1})
 
         }
     })
