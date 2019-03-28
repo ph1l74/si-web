@@ -446,7 +446,8 @@ function createInputModal() {
                     addPlayer(playerId, playerName);
                     animatedTextChange("Игрок добавлен", '.modal-text', delay, 'info', 1500);
                     $('#modalInput').val('');
-                    hideAcceptAnimation.play();
+                    $('#modalInput').removeClass('good');
+                    hideAcceptAnimation.play(0);
                 }
                 else {
                     animatedTextChange("Такое имя игрока уже существует", '.modal-text', delay, 'bad', 1500);
