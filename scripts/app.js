@@ -75,6 +75,16 @@ function createScoresDiv(playerId, mode) {
     const changeAnimation = new TimelineLite({
         paused: true,
         onComplete: function () {
+            $(document).click(function(e){
+                var $target = $(e.target);
+                var targetId = $target.closest('.scores-div').attr('id')
+                if (!targetId || targetId != scoresDivId) {
+                    $('#' + scoresDivId).fadeOut(150);
+                    changeAnimation.reverse(0);
+                    $(document).off('click');
+                    $('#' + scoresDivId).remove();
+                }
+            })
             $.each(scoresCosts, function (index, el) {
                 el.on('click', function () {
                     (mode === 'plus') ? scorePlus(playerId, el.data('cost')) : scoreMinus(playerId, el.data('cost'));
